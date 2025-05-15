@@ -1,3 +1,12 @@
 {
-  "hello": "world"
+  "spring.data.redis.host": "localhost",
+  "spring.data.redis.port": 16379,
+  "spring.data.hikari.jdbc-url": "jdbc:mariadb://localhost:13306/resources_api",
+  "spring.data.hikari.username": "root",
+  "spring.data.hikari.password": "root",
+  "spring.data.hikari.minimum-idle": 4,
+  "spring.data.hikari.maximum-pool-size": 10,
+  "spring.data.hikari.connection-timeout": 30000,
+  "spring.data.hikari.idle-timeout": 300000,
+  "spring.data.hikari.max-lifetime": 1800000
 }

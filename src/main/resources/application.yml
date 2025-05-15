@@ -1,0 +1,41 @@
+spring:
+    application:
+        name: resources-api
+    config:
+        import:
+            - optional:file:./env/.env.${spring.profiles.active}[.properties]
+            - vault://
+    cloud:
+        vault:
+            uri: ${VAULT_DOMAIN_ADDR:http://localhost:18200} # vault domain uri (port: 8200)
+            authentication: TOKEN
+            token: ${VAULT_AUTH_TOKEN:root} # vault root token
+            connection-timeout: 3000
+            read-timeout: 10000
+            kv:
+                backend: secret
+                application-name: resources-service
+                default-context:
+                profiles: ${spring.profiles.active}
+    data:
+        redis:
+            host: ${spring.data.redis.host}
+            port: ${spring.data.redis.port}
+    datasource:
+        hikari:
+            jdbcUrl: ${spring.data.hikari.jdbc-url}
+            username: ${spring.data.hikari.username}
+            password: ${spring.data.hikari.password}
+            driver-class-name: org.mariadb.jdbc.Driver
+            pool-name: API-POOL
+            minimum-idle: ${spring.data.hikari.minimum-idle}
+            maximum-pool-size: ${spring.data.hikari.maximum-pool-size}
+            connection-timeout: ${spring.data.hikari.connection-timeout}
+            idle-timeout: ${spring.data.hikari.idle-timeout}
+            max-lifetime: ${spring.data.hikari.max-lifetime}
+            connection-test-query: SELECT 1
+    flyway:
+        locations: classpath:db/migration/entity
+        sql-migration-suffixes: sql
+        baseline-on-migrate: true
+        baseline-version: 0
