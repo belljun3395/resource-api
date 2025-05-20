@@ -7,10 +7,45 @@ services:
             - MYSQL_ROOT_PASSWORD=root
             - MYSQL_ROOT_HOST=%
             - TZ=Asia/Seoul
+        command:
+          - --server-id=1
+          - --log-bin=mysql-bin
+          - --binlog-format=row
         ports:
             - "13306:3306"
         volumes:
             - ./mariadb-init.d:/docker-entrypoint-initdb.d
+
+    resources-mariadb-replica:
+        container_name: resources-mariadb-replica
+        image: mariadb:10
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_ROOT_HOST=%
+            - TZ=Asia/Seoul
+        command:
+            - --server-id=2
+            - --log-bin=mysql-bin
+            - --binlog-format=row
+            -  --read-only=1
+        ports:
+            - "23306:3306"
+        volumes:
+            - ./mariadb-init.d:/docker-entrypoint-initdb.d
+
+    resources-mariadb-replica-init:
+        image: mariadb:10
+        container_name: resources-mariadb-replica-init
+        depends_on:
+            - resources-mariadb
+            - resources-mariadb-replica
+        environment:
+            - MYSQL_PWD=resources-local
+        entrypoint: >
+            sh -c "sleep 5 &&
+            MASTER_LOG_FILE=$$(mysql -hresources-mariadb -uroot -proot -N -e \"SHOW MASTER STATUS\" | awk '{print $$1}') &&
+            MASTER_LOG_POS=$$(mysql -hresources-mariadb -uroot -proot -N -e \"SHOW MASTER STATUS\" | awk '{print $$2}') &&
+            echo \"STOP SLAVE; CHANGE MASTER TO MASTER_HOST='resources-mariadb', MASTER_USER='resources-local', MASTER_PASSWORD='resources-local', MASTER_LOG_FILE='$$MASTER_LOG_FILE', MASTER_LOG_POS=$$MASTER_LOG_POS; START SLAVE;\" | mysql -hresources-mariadb-replica -uroot -proot"
 
     resources-adminer: # mysql web admin
         container_name: resources-adminer
