@@ -25,20 +25,50 @@ spring:
                 max-redirects: ${spring.data.redis.cluster.max-redirects}
                 nodes: ${spring.data.redis.cluster.nodes}
     datasource:
-        hikari:
-            jdbcUrl: ${spring.data.hikari.jdbc-url}
-            username: ${spring.data.hikari.username}
-            password: ${spring.data.hikari.password}
-            driver-class-name: org.mariadb.jdbc.Driver
-            pool-name: API-POOL
-            minimum-idle: ${spring.data.hikari.minimum-idle}
-            maximum-pool-size: ${spring.data.hikari.maximum-pool-size}
-            connection-timeout: ${spring.data.hikari.connection-timeout}
-            idle-timeout: ${spring.data.hikari.idle-timeout}
-            max-lifetime: ${spring.data.hikari.max-lifetime}
-            connection-test-query: SELECT 1
+        write:
+            hikari:
+                jdbcUrl: ${spring.data.write.hikari.jdbc-url}
+                username: ${spring.data.write.hikari.username}
+                password: ${spring.data.write.hikari.password}
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-WRITE-POOL
+                minimum-idle: ${spring.data.write.hikari.minimum-idle}
+                maximum-pool-size: ${spring.data.write.hikari.maximum-pool-size}
+                connection-timeout: ${spring.data.write.hikari.connection-timeout}
+                idle-timeout: ${spring.data.write.hikari.idle-timeout}
+                max-lifetime: ${spring.data.write.hikari.max-lifetime}
+                connection-test-query: SELECT 1
+        read:
+            hikari:
+                jdbcUrl: ${spring.data.read.hikari.jdbc-url}
+                username: ${spring.data.read.hikari.username}
+                password: ${spring.data.read.hikari.password}
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-READ-POOL
+                minimum-idle: ${spring.data.read.hikari.minimum-idle}
+                maximum-pool-size: ${spring.data.read.hikari.maximum-pool-size}
+                connection-timeout: ${spring.data.read.hikari.connection-timeout}
+                idle-timeout: ${spring.data.read.hikari.idle-timeout}
+                max-lifetime: ${spring.data.read.hikari.max-lifetime}
+                connection-test-query: SELECT 1
     flyway:
         locations: classpath:db/migration/entity
         sql-migration-suffixes: sql
         baseline-on-migrate: true
         baseline-version: 0
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MariaDBDialect
+                hbm2ddl:
+                    jdbc_metadata_extraction_strategy: individually
+                format_sql: true
+                show_sql: false
+                order_inserts: true
+                order_updates: true
+                jdbc:
+                    batch_size: 500
+                    fetch_size: 500
+                    batch_versioned_data: true

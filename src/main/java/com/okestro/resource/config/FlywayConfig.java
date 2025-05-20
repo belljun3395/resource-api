@@ -53,12 +53,12 @@ public class FlywayConfig {
 	}
 
 	// ----------------- Database -----------------
-	@Value("${spring.datasource.hikari.jdbcUrl}")
+	@Value("${spring.datasource.write.hikari.jdbcUrl}")
 	private String url;
 
-	@Value("${spring.datasource.hikari.username}")
+	@Value("${spring.datasource.write.hikari.username}")
 	private String username;
 
-	@Value("${spring.datasource.hikari.password}")
+	@Value("${spring.datasource.write.hikari.password}")
 	private String password;
 }
