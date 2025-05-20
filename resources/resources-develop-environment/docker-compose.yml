@@ -22,17 +22,83 @@ services:
             - ADMINER_DESIGN=nette
             - ADMINER_PLUGINS=tables-filter tinymce
 
-    resources-redis:
+    resources-redis-cluster:
         image: redis:latest
-        container_name: resources-redis
-        ports:
-            - "26379:6379"
-
-    resources-redis-insight: # redis web admin
-        image: redislabs/redisinsight:latest
-        container_name: resources-redis-insight
+        container_name: resources-redis-cluster
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7001" ]
         ports:
             - "18081:5540"
+            - "7001:7001"
+            - "7002:7002"
+            - "7003:7003"
+            - "7004:7004"
+            - "7005:7005"
+            - "7006:7006"
+
+    resources-redis-node-2:
+        image: redis:latest
+        container_name: resources-redis-node-2
+        network_mode: "service:resources-redis-cluster"
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7002" ]
+
+    resources-redis-node-3:
+        image: redis:latest
+        container_name: resources-redis-node-3
+        network_mode: "service:resources-redis-cluster"
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7003" ]
+
+    resources-redis-node-4:
+        image: redis:latest
+        container_name: resources-redis-node-4
+        network_mode: "service:resources-redis-cluster"
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7004" ]
+
+    resources-redis-node-5:
+        image: redis:latest
+        container_name: resources-redis-node-5
+        network_mode: "service:resources-redis-cluster"
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7005" ]
+
+    resources-redis-node-6:
+        image: redis:latest
+        container_name: resources-redis-node-6
+        network_mode: "service:resources-redis-cluster"
+        volumes:
+            - ./cluster/redis.sh:/tmp/redis.sh
+        command: [ "sh","-c","chmod +x /tmp/redis.sh && /tmp/redis.sh password 7006" ]
+
+    resources-redis-cluster-init:
+        image: redis:latest
+        container_name: resources-redis-cluster-init
+        network_mode: "service:resources-redis-cluster"
+        depends_on:
+            - resources-redis-cluster
+            - resources-redis-node-2
+            - resources-redis-node-3
+            - resources-redis-node-4
+            - resources-redis-node-5
+            - resources-redis-node-6
+        entrypoint: >
+            sh -c "sleep 5 &&
+            echo yes | redis-cli -a password --cluster create
+            127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003
+            127.0.0.1:7004 127.0.0.1:7005 127.0.0.1:7006
+            --cluster-replicas 1"
+
+    resources-redis-insight:
+        image: redislabs/redisinsight:latest
+        container_name: resources-redis-insight
+        network_mode: "service:resources-redis-cluster"
 
     resources-vault:
         image: hashicorp/vault:1.14.0

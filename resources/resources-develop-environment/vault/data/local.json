@@ -1,6 +1,8 @@
 {
-  "spring.data.redis.host": "localhost",
-  "spring.data.redis.port": 16379,
+  "spring.data.redis.cluster.password": "password",
+  "spring.data.redis.cluster.max-redirects": 3,
+  "spring.data.redis.cluster.connect-ip": "localhost",
+  "spring.data.redis.cluster.nodes": "localhost:7001, localhost:7002, localhost:7003, localhost:7004, localhost:7005, localhost:7006",
   "spring.data.hikari.jdbc-url": "jdbc:mariadb://localhost:13306/resources_api",
   "spring.data.hikari.username": "root",
   "spring.data.hikari.password": "root",
