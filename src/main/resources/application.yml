@@ -19,8 +19,11 @@ spring:
                 profiles: ${spring.profiles.active}
     data:
         redis:
-            host: ${spring.data.redis.host}
-            port: ${spring.data.redis.port}
+            cluster:
+                password: ${spring.data.redis.cluster.password}
+                connect-ip: ${spring.data.redis.cluster.connect-ip}
+                max-redirects: ${spring.data.redis.cluster.max-redirects}
+                nodes: ${spring.data.redis.cluster.nodes}
     datasource:
         hikari:
             jdbcUrl: ${spring.data.hikari.jdbc-url}
