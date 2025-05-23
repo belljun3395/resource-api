@@ -86,3 +86,9 @@ spring:
                     batch_size: 500
                     fetch_size: 500
                     batch_versioned_data: true
+
+springdoc:
+    swagger-ui:
+        operations-sorter: alpha
+    model-and-view-allowed: true
+    packages-to-scan: com.okestro.resources
