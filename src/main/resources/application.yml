@@ -1,3 +1,17 @@
+server:
+    compression:
+        url:
+            enabled: true
+            patterns:
+                - "/api/**"
+            min-response-size: 1024
+            mime-types:
+                - "application/json"
+                - "application/*+json"
+    decompression:
+        request:
+            enabled: true
+
 spring:
     application:
         name: resources-api
