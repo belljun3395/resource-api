@@ -53,6 +53,10 @@ dependencies {
     implementation "org.mariadb.jdbc:mariadb-java-client:${mariadbVersion}"
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "org.flywaydb:flyway-mysql"
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
     /** docs */
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
@@ -116,5 +120,29 @@ openApi {
 springBoot {
     buildInfo {
         properties {}
+    }
+}
+
+def querydslDir = "src/main/generated"
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
+tasks.register("compileQClass") {
+    group = "querydsl"
+    description = "Compile Java sources including QueryDSL without running tests"
+
+    dependsOn("compileJava")
+    doLast {
+        println("QueryDSL classes compiled without running tests.")
     }
 }
