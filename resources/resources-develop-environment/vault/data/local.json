@@ -1,0 +1,22 @@
+{
+  "spring.data.redis.cluster.password": "password",
+  "spring.data.redis.cluster.max-redirects": 3,
+  "spring.data.redis.cluster.connect-ip": "localhost",
+  "spring.data.redis.cluster.nodes": "localhost:7001, localhost:7002, localhost:7003, localhost:7004, localhost:7005, localhost:7006",
+  "spring.data..write.hikari.jdbc-url": "jdbc:mariadb://localhost:13306/resources_api",
+  "spring.data.write.hikari.username": "root",
+  "spring.data.write.hikari.password": "root",
+  "spring.data.write.hikari.minimum-idle": 4,
+  "spring.data.write.hikari.maximum-pool-size": 10,
+  "spring.data.write.hikari.connection-timeout": 30000,
+  "spring.data.write.hikari.idle-timeout": 300000,
+  "spring.data.write.hikari.max-lifetime": 1800000,
+  "spring.data..read.hikari.jdbc-url": "jdbc:mariadb://localhost:23306/resources_api",
+  "spring.data.read.hikari.username": "root",
+  "spring.data.read.hikari.password": "root",
+  "spring.data.read.hikari.minimum-idle": 4,
+  "spring.data.read.hikari.maximum-pool-size": 10,
+  "spring.data.read.hikari.connection-timeout": 30000,
+  "spring.data.read.hikari.idle-timeout": 300000,
+  "spring.data.read.hikari.max-lifetime": 1800000
+}

@@ -1,0 +1,48 @@
+FROM openjdk:18-jdk-slim
+
+RUN apt-get update && apt-get install -y wget
+
+RUN mkdir -p /logs /pinpoint
+
+ENV PROFILE=default
+ENV TZ=Asia/Seoul
+EXPOSE 8080
+
+ARG JAVA_OPTS
+ARG RELEASE_VERSION
+ENV DD_VERSION=${RELEASE_VERSION}
+
+ARG JAR_FILE="build/libs/crm-0.0.1-SNAPSHOT.jar"
+COPY ${JAR_FILE} app.jar
+
+ARG PINPOINT_COLLECTOR_IP
+
+RUN wget -O /pinpoint-agent-3.0.0.tar.gz \
+    https://repo1.maven.org/maven2/com/navercorp/pinpoint/pinpoint-agent/3.0.0/pinpoint-agent-3.0.0.tar.gz && \
+    tar -xvf /pinpoint-agent-3.0.0.tar.gz -C /pinpoint && \
+    rm -rf /pinpoint-agent-3.0.0.tar.gz
+
+ENV PINPOINT_PROFILE=release
+ENV PINPOINT_AGENT_PATH=/pinpoint/pinpoint-agent-3.0.0
+
+RUN CONFIG_FILE=$PINPOINT_AGENT_PATH/profiles/release/pinpoint.config \
+    && sed -i "s/^profiler.transport.grpc.collector.ip=.*/profiler.transport.grpc.collector.ip=${PINPOINT_COLLECTOR_IP}/" $CONFIG_FILE \
+    && sed -i "s/^profiler.sampling.percent.sampling-rate=.*/profiler.sampling.percent.sampling-rate=100/" $CONFIG_FILE \
+    && sed -i "s/^profiler.sampling.counting.sampling-rate=.*/profiler.sampling.counting.sampling-rate=1/" $CONFIG_FILE \
+    && echo "###########################################################" >> $CONFIG_FILE \
+    && echo "# RestTemplate" >> $CONFIG_FILE \
+    && echo "###########################################################" >> $CONFIG_FILE \
+    && echo "profiler.resttemplate=true" >> $CONFIG_FILE \
+    && echo "###########################################################" >> $CONFIG_FILE \
+    && echo "# Spring WebFlux" >> $CONFIG_FILE \
+    && echo "###########################################################" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.enable=true" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.client.enable=true" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.client.param=true" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.client.cookie=true" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.client.cookie.dumptype=ALWAYS" >> $CONFIG_FILE \
+    && echo "profiler.spring.webflux.client.cookie.sampling.rate=1" >> $CONFIG_FILE
+
+COPY entrypoint.pinpoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

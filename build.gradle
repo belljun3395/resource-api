@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.11'
     id 'io.spring.dependency-management' version '1.1.7'
     id "com.diffplug.spotless" version "6.8.0"
+    id "org.springdoc.openapi-gradle-plugin" version "1.9.0"
 }
 
 group = 'com.okestro'
@@ -31,6 +32,8 @@ ext {
     set('flywayVersion', "10.12.0")
     set('apacheCommonsVersion', "3.17.0")
     set('validationApiVersion', "2.0.1.Final")
+    set('commonsIoVersion', "2.19.0")
+    set('springdocVersion', "2.3.0")
 }
 
 dependencies {
@@ -40,7 +43,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
@@ -51,12 +54,16 @@ dependencies {
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "org.flywaydb:flyway-mysql"
 
+    /** docs */
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     // common
     implementation "org.apache.commons:commons-lang3:${apacheCommonsVersion}"
+    implementation("commons-io:commons-io:${commonsIoVersion}")
 
     // validation
     implementation "javax.validation:validation-api:${validationApiVersion}"
@@ -97,5 +104,17 @@ spotless {
         indentWithSpaces()
         trimTrailingWhitespace()
         endWithNewline()
+    }
+}
+
+openApi {
+    customBootRun {
+        jvmArgs = ['-Dspring.profiles.active=local,new']
+    }
+}
+
+springBoot {
+    buildInfo {
+        properties {}
     }
 }
