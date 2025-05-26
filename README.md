@@ -41,3 +41,9 @@ cp ./build/openapi.json ./
 ```bash
 ./gradlew test
 ```
+
+### Q 클래스 생성
+
+```bash
+./gradlew compileQClass
+```
