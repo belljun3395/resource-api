@@ -72,5 +72,5 @@ public class InstanceEntity {
 
 	@Builder.Default
 	@Column(name = "deleted", nullable = false)
-	private boolean deleted = false;
+	private Boolean deleted = false;
 }
