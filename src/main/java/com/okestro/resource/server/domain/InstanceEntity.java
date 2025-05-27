@@ -20,12 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(
 		name = "instances",
-		uniqueConstraints = {
-			@UniqueConstraint(name = "uq_instance_alias", columnNames = "alias"),
-			@UniqueConstraint(
-					name = "uq_source",
-					columnNames = {"source_type", "source_target_id"})
-		})
+		uniqueConstraints = {@UniqueConstraint(name = "uq_instance_alias", columnNames = "alias")})
 @EntityListeners(AuditingEntityListener.class)
 public class InstanceEntity {
 	@Id
@@ -72,5 +67,5 @@ public class InstanceEntity {
 
 	@Builder.Default
 	@Column(name = "deleted", nullable = false)
-	private boolean deleted = false;
+	private Boolean deleted = false;
 }
