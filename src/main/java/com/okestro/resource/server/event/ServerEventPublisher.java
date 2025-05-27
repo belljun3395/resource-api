@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ServerEventPublisher {
-    private final ApplicationEventPublisher applicationEventPublisher;
+	private final ApplicationEventPublisher applicationEventPublisher;
 }
