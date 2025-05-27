@@ -92,3 +92,6 @@ springdoc:
         operations-sorter: alpha
     model-and-view-allowed: true
     packages-to-scan: com.okestro.resource
+
+logging:
+    config: classpath:logback-spring.xml
