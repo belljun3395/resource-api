@@ -91,4 +91,4 @@ springdoc:
     swagger-ui:
         operations-sorter: alpha
     model-and-view-allowed: true
-    packages-to-scan: com.okestro.resources
+    packages-to-scan: com.okestro.resource
