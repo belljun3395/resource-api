@@ -1,0 +1,97 @@
+server:
+    compression:
+        url:
+            enabled: true
+            patterns:
+                - "/api/**"
+            min-response-size: 1024
+            mime-types:
+                - "application/json"
+                - "application/*+json"
+    decompression:
+        request:
+            enabled: true
+
+spring:
+    application:
+        name: resources-api
+    config:
+        import:
+            - optional:file:./env/.env.${spring.profiles.active}[.properties]
+            - vault://
+    cloud:
+        vault:
+            uri: ${VAULT_DOMAIN_ADDR:http://localhost:18200} # vault domain uri (port: 8200)
+            authentication: TOKEN
+            token: ${VAULT_AUTH_TOKEN:root} # vault root token
+            connection-timeout: 3000
+            read-timeout: 10000
+            kv:
+                backend: secret
+                application-name: resources-service
+                default-context:
+                profiles: ${spring.profiles.active}
+    data:
+        redis:
+            cluster:
+                password: ${spring.data.redis.cluster.password}
+                connect-ip: ${spring.data.redis.cluster.connect-ip}
+                max-redirects: ${spring.data.redis.cluster.max-redirects}
+                nodes: ${spring.data.redis.cluster.nodes}
+    datasource:
+        write:
+            hikari:
+                jdbcUrl: ${spring.data.write.hikari.jdbc-url}
+                username: ${spring.data.write.hikari.username}
+                password: ${spring.data.write.hikari.password}
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-WRITE-POOL
+                minimum-idle: ${spring.data.write.hikari.minimum-idle}
+                maximum-pool-size: ${spring.data.write.hikari.maximum-pool-size}
+                connection-timeout: ${spring.data.write.hikari.connection-timeout}
+                idle-timeout: ${spring.data.write.hikari.idle-timeout}
+                max-lifetime: ${spring.data.write.hikari.max-lifetime}
+                connection-test-query: SELECT 1
+        read:
+            hikari:
+                jdbcUrl: ${spring.data.read.hikari.jdbc-url}
+                username: ${spring.data.read.hikari.username}
+                password: ${spring.data.read.hikari.password}
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-READ-POOL
+                minimum-idle: ${spring.data.read.hikari.minimum-idle}
+                maximum-pool-size: ${spring.data.read.hikari.maximum-pool-size}
+                connection-timeout: ${spring.data.read.hikari.connection-timeout}
+                idle-timeout: ${spring.data.read.hikari.idle-timeout}
+                max-lifetime: ${spring.data.read.hikari.max-lifetime}
+                connection-test-query: SELECT 1
+    flyway:
+        locations: classpath:db/migration/entity
+        sql-migration-suffixes: sql
+        baseline-on-migrate: true
+        baseline-version: 0
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MariaDBDialect
+                hbm2ddl:
+                    jdbc_metadata_extraction_strategy: individually
+                format_sql: true
+                show_sql: false
+                order_inserts: true
+                order_updates: true
+                jdbc:
+                    batch_size: 500
+                    fetch_size: 500
+                    batch_versioned_data: true
+
+springdoc:
+    swagger-ui:
+        operations-sorter: alpha
+    model-and-view-allowed: true
+    packages-to-scan: com.okestro.resource
+
+logging:
+    config: classpath:logback-spring.xml
