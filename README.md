@@ -42,6 +42,10 @@ cp ./build/openapi.json ./
 ./gradlew test
 ```
 
+### 테스트 데이터 생성 sql
+```bash
+cd ./src/main/resources/db/test/
+```
 ### Q 클래스 생성
 
 ```bash
