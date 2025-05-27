@@ -1,4 +1,4 @@
-package com.okestro.resource.server.event.server;
+package com.okestro.resource.server.event.instance;
 
 import lombok.Getter;
 
