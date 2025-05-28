@@ -9,6 +9,11 @@ import com.okestro.resource.server.domain.model.instance.NewInstance;
 import com.okestro.resource.server.domain.repository.FlavorRepository;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
 import com.okestro.resource.server.domain.vo.ImageSource;
+import com.okestro.resource.server.event.ServerEventPublisher;
+import com.okestro.resource.server.event.instance.InstanceEvent;
+import com.okestro.resource.server.support.json.ServerAction;
+import com.okestro.resource.server.support.json.ServerActionJson;
+import com.okestro.resource.server.support.json.ServerJsonConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PostInstanceUseCase {
+	private final ServerEventPublisher serverEventPublisher;
+	private final ServerJsonConverter serverJsonConverter;
+
 	private final InstanceRepository instanceRepository;
 	private final FlavorRepository flavorRepository;
 	private final InstanceSourceService instanceSourceService;
@@ -39,6 +47,7 @@ public class PostInstanceUseCase {
 		Instance savedInstance =
 				Instance.from(instanceRepository.save(InstanceEntity.createNew(newInstance)));
 
+		publishEvent(savedInstance, flavor, imageSource);
 		return PostInstanceUsecaseDto.out(savedInstance, flavor, imageSource);
 	}
 
@@ -57,5 +66,15 @@ public class PostInstanceUseCase {
 						() ->
 								new IllegalArgumentException(
 										"can not find image source by type: " + sourceType + ", id: " + sourceId));
+	}
+
+	private void publishEvent(Instance savedInstance, Flavor flavor, ImageSource imageSource) {
+		ServerActionJson serverActionJson =
+				serverJsonConverter.toJson(ServerAction.CREATE, savedInstance, flavor, imageSource);
+		InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceCreateLogEvent
+				event =
+						new InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent
+								.InstanceCreateLogEvent(savedInstance.getId(), serverActionJson);
+		serverEventPublisher.publishEvent(event);
 	}
 }
