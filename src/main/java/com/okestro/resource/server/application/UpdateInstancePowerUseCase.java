@@ -4,6 +4,7 @@ import com.okestro.resource.server.application.dto.UpdateInstancePowerUsecaseDto
 import com.okestro.resource.server.application.service.power.InstancePowerActionManager;
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.domain.model.instance.Instance;
+import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
 import com.okestro.resource.server.event.ServerEventPublisher;
 import com.okestro.resource.server.event.instance.InstanceEvent;
@@ -34,7 +35,9 @@ public class UpdateInstancePowerUseCase {
 				instancePowerActionManager.execute(instance, powerStatusAction);
 
 		publishEvent(updatedPowerInstance);
-		return UpdateInstancePowerUsecaseDto.out(updatedPowerInstance);
+
+		boolean isUpdated = instance instanceof UpdatedInstance;
+		return UpdateInstancePowerUsecaseDto.out(updatedPowerInstance, isUpdated);
 	}
 
 	private Instance findInstance(Long instanceId) {
