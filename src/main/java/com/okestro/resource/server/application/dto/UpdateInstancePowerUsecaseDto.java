@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.controller.request.UpdateInstancePowerRequest;
 import com.okestro.resource.server.domain.model.instance.Instance;
-import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,7 @@ public class UpdateInstancePowerUsecaseDto {
 				.build();
 	}
 
-	public static UpdateInstanceUseCaseOut out(Instance instance) {
-		boolean isUpdated = instance instanceof UpdatedInstance;
+	public static UpdateInstanceUseCaseOut out(Instance instance, boolean isUpdated) {
 		return UpdateInstanceUseCaseOut.builder()
 				.id(instance.getId())
 				.name(instance.getName())
