@@ -25,5 +25,11 @@ public abstract class InstanceEvent {
 				this.log = json.getJson();
 			}
 		}
+
+		public static class InstanceUpdateLogEvent extends InstanceTransactionLogEvent {
+			public InstanceUpdateLogEvent(Long id, ServerActionJson json) {
+				super(id, json);
+			}
+		}
 	}
 }
