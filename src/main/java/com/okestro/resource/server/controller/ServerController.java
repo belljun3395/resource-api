@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController {
 	private final PostInstanceUseCase postInstanceUseCase;
 
-	@PostMapping("/instance")
+	@PostMapping("/instances")
 	public ApiResponse<ApiResponse.SuccessBody<PostInstanceUsecaseDto.PostInstanceUseCaseOut>>
 			postInstance(@RequestBody PostInstanceRequest request) {
 		PostInstanceUsecaseDto.PostInstanceUseCaseOut useCaseOut =
