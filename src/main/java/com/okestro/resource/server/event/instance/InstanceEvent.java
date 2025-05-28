@@ -22,7 +22,7 @@ public abstract class InstanceEvent {
 
 			public InstanceTransactionLogEvent(Long id, ServerActionJson json) {
 				super(id);
-				this.log = json.toString();
+				this.log = json.getJson();
 			}
 		}
 	}
