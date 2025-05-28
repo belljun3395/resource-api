@@ -34,9 +34,11 @@ public class UpdateInstancePowerUseCase {
 		final Instance updatedPowerInstance =
 				instancePowerActionManager.execute(instance, powerStatusAction);
 
-		publishEvent(updatedPowerInstance);
+		boolean isUpdated = updatedPowerInstance instanceof UpdatedInstance;
+		if (isUpdated) {
+			publishEvent(updatedPowerInstance);
+		}
 
-		boolean isUpdated = instance instanceof UpdatedInstance;
 		return UpdateInstancePowerUsecaseDto.out(updatedPowerInstance, isUpdated);
 	}
 
