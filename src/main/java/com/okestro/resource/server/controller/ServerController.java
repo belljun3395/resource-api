@@ -21,9 +21,6 @@ public class ServerController {
 			updateInstancePower(@RequestBody UpdateInstancePowerRequest request) {
 		UpdateInstancePowerUsecaseDto.UpdateInstanceUseCaseOut useCaseOut =
 				updateInstancePowerUseCase.execute(UpdateInstancePowerUsecaseDto.in(request));
-		if (useCaseOut.getIsUpdated()) {
-			return ApiResponseGenerator.success(useCaseOut, HttpStatus.OK);
-		}
-		return ApiResponseGenerator.success(useCaseOut, HttpStatus.NOT_MODIFIED);
+		return ApiResponseGenerator.success(useCaseOut, HttpStatus.OK);
 	}
 }

@@ -1,6 +1,5 @@
 package com.okestro.resource.server.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.controller.request.UpdateInstancePowerRequest;
 import com.okestro.resource.server.domain.model.instance.Instance;
@@ -19,7 +18,7 @@ public class UpdateInstancePowerUsecaseDto {
 				.build();
 	}
 
-	public static UpdateInstanceUseCaseOut out(Instance instance, boolean isUpdated) {
+	public static UpdateInstanceUseCaseOut out(Instance instance) {
 		return UpdateInstanceUseCaseOut.builder()
 				.id(instance.getId())
 				.name(instance.getName())
@@ -28,7 +27,6 @@ public class UpdateInstancePowerUsecaseDto {
 				.powerStatus(instance.getPowerStatus().name())
 				.host(instance.getHost().getValue())
 				.updatedAt(instance.getUpdatedAt())
-				.isUpdated(isUpdated)
 				.build();
 	}
 
@@ -53,6 +51,5 @@ public class UpdateInstancePowerUsecaseDto {
 		@NotNull private String powerStatus;
 		@NotNull private String host;
 		@NotNull private LocalDateTime updatedAt;
-		@JsonIgnore @NotNull private Boolean isUpdated;
 	}
 }
