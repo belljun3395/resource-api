@@ -25,6 +25,7 @@ import com.okestro.resource.support.web.converter.LocalDateTimeJsonConverter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -60,6 +61,18 @@ class PostInstanceUseCaseTest {
 	@Mock private InstanceRepository instanceRepository;
 	@Mock private FlavorRepository flavorRepository;
 	@Mock private InstanceSourceService instanceSourceService;
+	private PostInstanceUseCase postInstanceUseCase;
+
+	@BeforeEach
+	void setUp() {
+		postInstanceUseCase =
+				new PostInstanceUseCase(
+						serverEventPublisher,
+						serverJsonConverter,
+						instanceRepository,
+						flavorRepository,
+						instanceSourceService);
+	}
 
 	@Test
 	void create_new_instance() {
@@ -108,13 +121,6 @@ class PostInstanceUseCaseTest {
 										.InstanceCreateLogEvent.class));
 
 		// when
-		PostInstanceUseCase postInstanceUseCase =
-				new PostInstanceUseCase(
-						serverEventPublisher,
-						serverJsonConverter,
-						instanceRepository,
-						flavorRepository,
-						instanceSourceService);
 		postInstanceUseCase.execute(useCaseIn);
 
 		// then
@@ -145,13 +151,6 @@ class PostInstanceUseCaseTest {
 		given(flavorRepository.findById(flavorId)).willReturn(Optional.empty());
 
 		// when
-		PostInstanceUseCase postInstanceUseCase =
-				new PostInstanceUseCase(
-						serverEventPublisher,
-						serverJsonConverter,
-						instanceRepository,
-						flavorRepository,
-						instanceSourceService);
 		assertThrows(
 				RuntimeException.class,
 				() -> {
@@ -197,13 +196,6 @@ class PostInstanceUseCaseTest {
 		given(instanceSourceService.find(any(ImageSource.class))).willReturn(Optional.empty());
 
 		// when
-		PostInstanceUseCase postInstanceUseCase =
-				new PostInstanceUseCase(
-						serverEventPublisher,
-						serverJsonConverter,
-						instanceRepository,
-						flavorRepository,
-						instanceSourceService);
 		assertThrows(
 				RuntimeException.class,
 				() -> {
