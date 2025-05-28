@@ -1,5 +1,6 @@
 package com.okestro.resource.config;
 
+import com.okestro.resource.server.controller.support.InstancePowerStatusActionConverter;
 import com.okestro.resource.support.web.converter.*;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addConverter(new LocalDateParamBinder());
 		registry.addConverter(new LocalTimeParamBinder());
 		registry.addConverter(new LocalDateTimeParamBinder());
+		registry.addConverter(new InstancePowerStatusActionConverter());
 	}
 
 	@Override
