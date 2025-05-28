@@ -39,7 +39,7 @@ public class UpdateInstancePowerUseCase {
 			publishEvent(updatedPowerInstance);
 		}
 
-		return UpdateInstancePowerUsecaseDto.out(updatedPowerInstance, isUpdated);
+		return UpdateInstancePowerUsecaseDto.out(updatedPowerInstance);
 	}
 
 	private Instance findInstance(Long instanceId) {
