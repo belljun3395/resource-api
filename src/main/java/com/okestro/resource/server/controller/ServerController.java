@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ServerController {
 	private final UpdateInstancePowerUseCase updateInstancePowerUseCase;
 
-	@PutMapping("/instance/power")
+	@PutMapping("/instances/power")
 	public ApiResponse<
 					ApiResponse.SuccessBody<UpdateInstancePowerUsecaseDto.UpdateInstanceUseCaseOut>>
 			updateInstancePower(@RequestBody UpdateInstancePowerRequest request) {
