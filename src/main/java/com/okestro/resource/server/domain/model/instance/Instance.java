@@ -14,7 +14,7 @@ public class Instance extends BaseInstance {
 	private final LocalDateTime createdAt;
 	private final LocalDateTime updatedAt;
 
-	private Instance(
+	protected Instance(
 			String name,
 			String description,
 			InstanceAlias alias,
@@ -43,5 +43,21 @@ public class Instance extends BaseInstance {
 				instanceEntity.getId(),
 				instanceEntity.getCreatedAt(),
 				instanceEntity.getUpdatedAt());
+	}
+
+	public UpdatedInstance start() {
+		return updatePowerStatus(PowerStatus.RUNNING);
+	}
+
+	public UpdatedInstance shutdown() {
+		return updatePowerStatus(PowerStatus.SHUTDOWN);
+	}
+
+	public UpdatedInstance pause() {
+		return updatePowerStatus(PowerStatus.PAUSED);
+	}
+
+	private UpdatedInstance updatePowerStatus(PowerStatus powerStatus) {
+		return UpdatedInstance.of(this, powerStatus);
 	}
 }
