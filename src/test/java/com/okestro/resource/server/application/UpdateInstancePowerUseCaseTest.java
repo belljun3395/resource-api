@@ -1,8 +1,7 @@
 package com.okestro.resource.server.application;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,6 +21,7 @@ import com.okestro.resource.server.domain.vo.ImageSource;
 import com.okestro.resource.server.domain.vo.InstanceAlias;
 import com.okestro.resource.server.domain.vo.InstanceHost;
 import com.okestro.resource.server.event.ServerEventPublisher;
+import com.okestro.resource.server.event.instance.InstanceEvent;
 import com.okestro.resource.server.support.json.ServerJsonConverter;
 import com.okestro.resource.support.web.converter.LocalDateJsonConverter;
 import com.okestro.resource.support.web.converter.LocalDateTimeJsonConverter;
@@ -100,6 +100,9 @@ class UpdateInstancePowerUseCaseTest {
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
 		given(instancePowerActionManager.execute(any(Instance.class), eq(action)))
 				.willReturn(updatedInstance);
+		willDoNothing()
+				.given(serverEventPublisher)
+				.publishEvent(any(InstanceEvent.InstanceTransactionEvent.InstanceUpdateLogEvent.class));
 
 		// when
 		UpdateInstancePowerUsecaseDto.UpdateInstanceUseCaseOut result =
@@ -112,6 +115,49 @@ class UpdateInstancePowerUseCaseTest {
 		// then
 		then(instanceRepository).should(times(1)).findById(instanceId);
 		then(instancePowerActionManager).should(times(1)).execute(any(Instance.class), eq(action));
+		then(serverEventPublisher)
+				.should(times(1))
+				.publishEvent(any(InstanceEvent.InstanceTransactionEvent.InstanceUpdateLogEvent.class));
+	}
+
+	@Test
+	void update_instance_power_status_start_but_already_started() {
+		// given
+		Long instanceId = 1L;
+		InstancePowerStatusAction action = InstancePowerStatusAction.START;
+		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
+		InstanceEntity instanceEntity =
+				InstanceEntity.builder()
+						.id(instanceId)
+						.name("test-instance")
+						.description("This is a test instance")
+						.alias(InstanceAlias.create("test"))
+						.powerStatus(PowerStatus.RUNNING)
+						.host(new InstanceHost("localhost"))
+						.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
+						.flavorId(1L)
+						.createdAt(createdDate)
+						.updatedAt(createdDate)
+						.build();
+		Instance instance = Instance.from(instanceEntity);
+
+		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
+		given(instancePowerActionManager.execute(any(Instance.class), eq(action))).willReturn(instance);
+
+		// when
+		UpdateInstancePowerUsecaseDto.UpdateInstanceUseCaseOut result =
+				updateInstancePowerUseCase.execute(
+						UpdateInstancePowerUsecaseDto.UpdateInstancePowerUseCaseIn.builder()
+								.instanceId(instanceId)
+								.powerStatusAction(action)
+								.build());
+
+		// then
+		then(instanceRepository).should(times(1)).findById(instanceId);
+		then(instancePowerActionManager).should(times(1)).execute(any(Instance.class), eq(action));
+		then(serverEventPublisher)
+				.should(notCalled)
+				.publishEvent(any(InstanceEvent.InstanceTransactionEvent.InstanceUpdateLogEvent.class));
 	}
 
 	@Test
@@ -136,6 +182,9 @@ class UpdateInstancePowerUseCaseTest {
 		then(instancePowerActionManager)
 				.should(notCalled)
 				.execute(any(Instance.class), any(InstancePowerStatusAction.class));
+		then(serverEventPublisher)
+				.should(notCalled)
+				.publishEvent(any(InstanceEvent.InstanceTransactionEvent.InstanceUpdateLogEvent.class));
 	}
 
 	@Test
@@ -175,5 +224,8 @@ class UpdateInstancePowerUseCaseTest {
 		// then
 		then(instanceRepository).should(times(1)).findById(instanceId);
 		then(instancePowerActionManager).should(times(1)).execute(any(Instance.class), eq(action));
+		then(serverEventPublisher)
+				.should(notCalled)
+				.publishEvent(any(InstanceEvent.InstanceTransactionEvent.InstanceUpdateLogEvent.class));
 	}
 }
