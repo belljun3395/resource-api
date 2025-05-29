@@ -40,8 +40,8 @@ public class Instance extends BaseInstance {
 		return updatePowerStatus(PowerStatus.RUNNING);
 	}
 
-	public UpdatedInstance shutdown() {
-		return updatePowerStatus(PowerStatus.SHUTDOWN);
+	public ShutDownInstance shutdown() {
+		return ShutDownInstance.of(this);
 	}
 
 	public UpdatedInstance pause() {
