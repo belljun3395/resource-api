@@ -16,6 +16,18 @@ public abstract class InstanceEvent {
 			super(id);
 		}
 
+		public abstract static class InstanceTxCommand extends InstanceTransactionEvent {
+			public InstanceTxCommand(Long id) {
+				super(id);
+			}
+		}
+
+		public static class DeleteInstanceCommand extends InstanceTxCommand {
+			public DeleteInstanceCommand(Long id) {
+				super(id);
+			}
+		}
+
 		@Getter
 		public abstract static class InstanceTransactionLogEvent extends InstanceTransactionEvent {
 			private final String log;
@@ -28,6 +40,12 @@ public abstract class InstanceEvent {
 
 		public static class InstanceUpdateLogEvent extends InstanceTransactionLogEvent {
 			public InstanceUpdateLogEvent(Long id, ServerActionJson json) {
+				super(id, json);
+			}
+		}
+
+		public static class InstanceDeleteLogEvent extends InstanceTransactionLogEvent {
+			public InstanceDeleteLogEvent(Long id, ServerActionJson json) {
 				super(id, json);
 			}
 		}
