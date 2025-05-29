@@ -1,6 +1,7 @@
 package com.okestro.resource.server.domain;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
+import com.okestro.resource.server.domain.model.instance.DeleteInstance;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.support.InstanceAliasConverter;
 import com.okestro.resource.server.domain.support.InstanceHostConverter;
@@ -11,6 +12,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -26,6 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 		name = "instances",
 		uniqueConstraints = {@UniqueConstraint(name = "uq_instance_alias", columnNames = "alias")})
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "update  instances set deleted = true where id = ?")
 public class InstanceEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,27 +91,43 @@ public class InstanceEntity {
 				.build();
 	}
 
-	@Override
-	public final boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null) return false;
-		Class<?> oEffectiveClass =
-				o instanceof HibernateProxy
-						? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-						: o.getClass();
-		Class<?> thisEffectiveClass =
-				this instanceof HibernateProxy
-						? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
-						: this.getClass();
-		if (thisEffectiveClass != oEffectiveClass) return false;
-		InstanceEntity instance = (InstanceEntity) o;
-		return getId() != null && Objects.equals(getId(), instance.getId());
+	public static InstanceEntity updateTo(DeleteInstance instance) {
+		return InstanceEntity.builder()
+				.id(instance.getId())
+				.name(instance.getName())
+				.description(instance.getDescription())
+				.alias(instance.getAlias())
+				.powerStatus(instance.getPowerStatus())
+				.host(instance.getHost())
+				.flavorId(instance.getFlavorId())
+				.imageSource(instance.getImageSource())
+				.createdAt(instance.getCreatedAt())
+				.updatedAt(instance.getUpdatedAt())
+				.deleted(instance.getIsDeleted())
+				.build();
 	}
 
-	@Override
-	public final int hashCode() {
-		return this instanceof HibernateProxy
-				? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
-				: getClass().hashCode();
-	}
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass =
+                o instanceof HibernateProxy
+                        ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                        : o.getClass();
+        Class<?> thisEffectiveClass =
+                this instanceof HibernateProxy
+                        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                        : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        InstanceEntity instance = (InstanceEntity) o;
+        return getId() != null && Objects.equals(getId(), instance.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
+    }
 }
