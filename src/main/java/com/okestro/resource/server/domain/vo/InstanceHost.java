@@ -2,8 +2,12 @@ package com.okestro.resource.server.domain.vo;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
+@EqualsAndHashCode
+@ToString
 @Getter
 public class InstanceHost {
 	private final String value;
