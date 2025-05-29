@@ -8,7 +8,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 @RequiredArgsConstructor
 public class InstanceTransactionEventListener {
-	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void afterCommit(
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION)
+	public void afterCompletion(
 			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent event) {}
 }
