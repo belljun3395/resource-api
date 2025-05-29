@@ -1,8 +1,12 @@
 package com.okestro.resource.server.domain.vo;
 
 import java.util.Random;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
+@EqualsAndHashCode
+@ToString
 @Getter
 public class InstanceAlias {
 	private static final String SPLIT_REGEX = "_";
