@@ -20,6 +20,10 @@ public class GzipServerHttpResponse extends CompressionHttpResponse {
 
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
+		if (getStatus() >= 400) {
+			return super.getOutputStream();
+		}
+
 		if (!isMimeTypeMatches()) {
 			return super.getOutputStream();
 		}
@@ -69,8 +73,11 @@ public class GzipServerHttpResponse extends CompressionHttpResponse {
 
 		@Override
 		public void close() throws IOException {
-			this.gzipOutputStream.finish();
-			this.gzipOutputStream.close();
+			try {
+				this.gzipOutputStream.finish();
+			} finally {
+				this.originalStream.close();
+			}
 		}
 	}
 }
