@@ -31,7 +31,8 @@ public class DeleteInstanceUseCase {
 	public DeleteInstanceUseCaseDto.DeleteInstanceUseCaseOut execute(
 			DeleteInstanceUseCaseDto.DeleteInstanceUseCaseIn useCaseIn) {
 		final Long instanceId = useCaseIn.getInstanceId();
-		final Instance instance = findInstance(instanceId);
+
+		Instance instance = findInstance(instanceId);
 		ShutDownInstance shutDownInstance = instance.shutdown();
 		ShutDownInstance shutDownedInstance =
 				ShutDownInstance.from(instanceRepository.save(InstanceEntity.updateTo(shutDownInstance)));
