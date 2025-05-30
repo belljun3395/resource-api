@@ -1,6 +1,7 @@
 package com.okestro.resource.server.domain;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
+import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.support.InstanceAliasConverter;
 import com.okestro.resource.server.domain.support.InstanceHostConverter;
 import com.okestro.resource.server.domain.vo.ImageSource;
@@ -60,17 +61,32 @@ public class InstanceEntity {
 
 	@NonNull @Embedded private ImageSource imageSource;
 
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(name = "created_at", nullable = false)
 	@CreatedDate
 	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", nullable = false, updatable = false)
+	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
 	@Builder.Default
 	@Column(name = "deleted", nullable = false)
 	private Boolean deleted = false;
+
+	public static InstanceEntity updateTo(UpdatedInstance instance) {
+		return InstanceEntity.builder()
+				.id(instance.getId())
+				.name(instance.getName())
+				.description(instance.getDescription())
+				.alias(instance.getAlias())
+				.powerStatus(instance.getPowerStatus())
+				.host(instance.getHost())
+				.flavorId(instance.getFlavorId())
+				.imageSource(instance.getImageSource())
+				.createdAt(instance.getCreatedAt())
+				.updatedAt(instance.getUpdatedAt())
+				.build();
+	}
 
 	@Override
 	public final boolean equals(Object o) {
