@@ -41,8 +41,9 @@ public class DeleteInstanceUseCase {
 
 		if (!deleteInstance.getIsDeleted()) {
 			publishEvent(ServerAction.UPDATE, deleteInstance);
+		} else {
+			publishEvent(ServerAction.DELETE, deleteInstance);
 		}
-		publishEvent(ServerAction.DELETE, deleteInstance);
 
 		return out(deleteInstance);
 	}
