@@ -43,10 +43,15 @@ public abstract class CompressionHttpResponse extends HttpServletResponseWrapper
 
 	public void setCompressionHeaders(String encoding) {
 		// Add the Vary header to indicate that the response varies based on the Accept-Encoding header
-		addHeader(HttpHeaders.VARY, HttpHeaders.ACCEPT_ENCODING);
+		String existingVary = getHeader(HttpHeaders.VARY);
+		if (existingVary == null || !existingVary.contains(HttpHeaders.ACCEPT_ENCODING)) {
+			addHeader(HttpHeaders.VARY, HttpHeaders.ACCEPT_ENCODING);
+		}
 		// Set the Content-Encoding header to indicate that the response is compressed
 		setHeader(HttpHeaders.CONTENT_ENCODING, encoding);
 		// Remove any existing Content-Length header to enable chunked transfer
-		setHeader(HttpHeaders.CONTENT_LENGTH, null);
+		if (containsHeader(HttpHeaders.CONTENT_LENGTH)) {
+			setIntHeader(HttpHeaders.CONTENT_LENGTH, -1);
+		}
 	}
 }
