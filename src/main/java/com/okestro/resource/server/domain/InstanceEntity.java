@@ -1,6 +1,7 @@
 package com.okestro.resource.server.domain;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
+import com.okestro.resource.server.domain.model.instance.NewInstance;
 import com.okestro.resource.server.domain.support.InstanceAliasConverter;
 import com.okestro.resource.server.domain.support.InstanceHostConverter;
 import com.okestro.resource.server.domain.vo.ImageSource;
@@ -71,6 +72,18 @@ public class InstanceEntity {
 	@Builder.Default
 	@Column(name = "deleted", nullable = false)
 	private Boolean deleted = false;
+
+	public static InstanceEntity createNew(NewInstance newInstance) {
+		return InstanceEntity.builder()
+				.name(newInstance.getName())
+				.description(newInstance.getDescription())
+				.alias(newInstance.getAlias())
+				.powerStatus(PowerStatus.RUNNING)
+				.host(newInstance.getHost())
+				.flavorId(newInstance.getFlavorId())
+				.imageSource(newInstance.getImageSource())
+				.build();
+	}
 
 	@Override
 	public final boolean equals(Object o) {
