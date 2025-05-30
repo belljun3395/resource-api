@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 @RequiredArgsConstructor
 public class AsyncConfig implements AsyncConfigurer {
-	private static final String DEFAULT_EXECUTOR = "threadPoolTaskExecutor";
+	public static final String DEFAULT_EXECUTOR = "threadPoolTaskExecutor";
 
 	private final DefaultAsyncExceptionHandler defaultAsyncExceptionHandler;
 
