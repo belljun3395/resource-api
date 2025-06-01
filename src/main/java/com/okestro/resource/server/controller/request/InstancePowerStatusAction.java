@@ -7,25 +7,25 @@ import lombok.Getter;
 public enum InstancePowerStatusAction {
 	START(0L) {
 		@Override
-		public PowerStatus wantPowerStatus() {
+		public PowerStatus expectedPowerStatus() {
 			return PowerStatus.RUNNING;
 		}
 	},
 	SHUTDOWN(1L) {
 		@Override
-		public PowerStatus wantPowerStatus() {
+		public PowerStatus expectedPowerStatus() {
 			return PowerStatus.SHUTDOWN;
 		}
 	},
 	REBOOT(2L) {
 		@Override
-		public PowerStatus wantPowerStatus() {
+		public PowerStatus expectedPowerStatus() {
 			return PowerStatus.RUNNING;
 		}
 	},
 	PAUSE(3L) {
 		@Override
-		public PowerStatus wantPowerStatus() {
+		public PowerStatus expectedPowerStatus() {
 			return PowerStatus.PAUSED;
 		}
 	};
@@ -45,5 +45,5 @@ public enum InstancePowerStatusAction {
 		throw new IllegalArgumentException("Invalid power status code: " + code);
 	}
 
-	public abstract PowerStatus wantPowerStatus();
+	public abstract PowerStatus expectedPowerStatus();
 }

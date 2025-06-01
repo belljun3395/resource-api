@@ -2,7 +2,6 @@ package com.okestro.resource.server.application;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -95,7 +94,7 @@ class UpdateInstancePowerUseCaseTest {
 						.updatedAt(createdDate)
 						.build();
 		Instance instance = Instance.from(instanceEntity);
-		UpdatedInstance updatedInstance = UpdatedInstance.of(instance, action.wantPowerStatus());
+		UpdatedInstance updatedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
 
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
 		given(instancePowerActionManager.execute(any(Instance.class), eq(action)))

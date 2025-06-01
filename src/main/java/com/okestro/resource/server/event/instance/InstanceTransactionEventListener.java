@@ -15,8 +15,8 @@ public class InstanceTransactionEventListener {
 	private final InstanceUpdateLogHandler instanceUpdateLogHandler;
 
 	@Async(value = DEFAULT_EXECUTOR)
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION)
-    public void afterCompletion(
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION)
+	public void afterCompletion(
 			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent event) {
 		if (event
 				instanceof
