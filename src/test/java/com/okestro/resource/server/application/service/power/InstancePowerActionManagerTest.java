@@ -59,7 +59,8 @@ class InstancePowerActionManagerTest {
 		Instance instance = createTestInstance(PowerStatus.SHUTDOWN);
 		InstancePowerStatusAction action = InstancePowerStatusAction.START;
 
-		Instance expectedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
+		Instance expectedInstance =
+				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
 		given(startInstancePowerActionService.doExecute(any(Instance.class), any(PowerStatus.class)))
 				.willReturn(expectedInstance);
 
@@ -69,7 +70,8 @@ class InstancePowerActionManagerTest {
 		// then
 		then(startInstancePowerActionService)
 				.should(times(1))
-				.doExecute(any(Instance.class), eq(action.expectedPowerStatus()));
+				.doExecute(
+						any(Instance.class), eq(InstancePowerStatusActionSupporter.getPowerStatus(action)));
 		then(shutdownInstancePowerActionService)
 				.should(never())
 				.doExecute(any(Instance.class), any(PowerStatus.class));
@@ -87,7 +89,8 @@ class InstancePowerActionManagerTest {
 		Instance instance = createTestInstance(PowerStatus.RUNNING);
 		InstancePowerStatusAction action = InstancePowerStatusAction.SHUTDOWN;
 
-		Instance expectedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
+		Instance expectedInstance =
+				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
 		given(shutdownInstancePowerActionService.doExecute(any(Instance.class), any(PowerStatus.class)))
 				.willReturn(expectedInstance);
 
@@ -100,7 +103,8 @@ class InstancePowerActionManagerTest {
 				.doExecute(any(Instance.class), any(PowerStatus.class));
 		then(shutdownInstancePowerActionService)
 				.should(times(1))
-				.doExecute(any(Instance.class), eq(action.expectedPowerStatus()));
+				.doExecute(
+						any(Instance.class), eq(InstancePowerStatusActionSupporter.getPowerStatus(action)));
 		then(pauseInstancePowerActionService)
 				.should(never())
 				.doExecute(any(Instance.class), any(PowerStatus.class));
@@ -115,7 +119,8 @@ class InstancePowerActionManagerTest {
 		Instance instance = createTestInstance(PowerStatus.RUNNING);
 		InstancePowerStatusAction action = InstancePowerStatusAction.PAUSE;
 
-		Instance expectedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
+		Instance expectedInstance =
+				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
 		given(pauseInstancePowerActionService.doExecute(any(Instance.class), any(PowerStatus.class)))
 				.willReturn(expectedInstance);
 
@@ -131,7 +136,8 @@ class InstancePowerActionManagerTest {
 				.doExecute(any(Instance.class), any(PowerStatus.class));
 		then(pauseInstancePowerActionService)
 				.should(times(1))
-				.doExecute(any(Instance.class), eq(action.expectedPowerStatus()));
+				.doExecute(
+						any(Instance.class), eq(InstancePowerStatusActionSupporter.getPowerStatus(action)));
 		then(rebootInstancePowerActionService)
 				.should(never())
 				.doExecute(any(Instance.class), any(PowerStatus.class));
@@ -143,7 +149,8 @@ class InstancePowerActionManagerTest {
 		Instance instance = createTestInstance(PowerStatus.RUNNING);
 		InstancePowerStatusAction action = InstancePowerStatusAction.REBOOT;
 
-		Instance expectedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
+		Instance expectedInstance =
+				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
 		given(rebootInstancePowerActionService.doExecute(any(Instance.class), any(PowerStatus.class)))
 				.willReturn(expectedInstance);
 
@@ -162,7 +169,8 @@ class InstancePowerActionManagerTest {
 				.doExecute(any(Instance.class), any(PowerStatus.class));
 		then(rebootInstancePowerActionService)
 				.should(times(1))
-				.doExecute(any(Instance.class), eq(action.expectedPowerStatus()));
+				.doExecute(
+						any(Instance.class), eq(InstancePowerStatusActionSupporter.getPowerStatus(action)));
 	}
 
 	private Instance createTestInstance(PowerStatus powerStatus) {

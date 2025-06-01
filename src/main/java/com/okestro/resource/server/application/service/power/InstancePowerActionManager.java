@@ -33,7 +33,7 @@ public class InstancePowerActionManager {
 	}
 
 	public Instance execute(Instance instance, InstancePowerStatusAction action) {
-		PowerStatus wantPowerStatus = action.expectedPowerStatus();
+		PowerStatus wantPowerStatus = InstancePowerStatusActionSupporter.getPowerStatus(action);
 		InstancePowerActionService instancePowerActionService =
 				Optional.ofNullable(instancePowerActions.getOrDefault(action, null))
 						.orElseThrow(() -> new IllegalArgumentException("Unsupported action: " + action));

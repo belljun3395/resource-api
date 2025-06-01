@@ -94,7 +94,8 @@ class UpdateInstancePowerUseCaseTest {
 						.updatedAt(createdDate)
 						.build();
 		Instance instance = Instance.from(instanceEntity);
-		UpdatedInstance updatedInstance = UpdatedInstance.of(instance, action.expectedPowerStatus());
+		UpdatedInstance updatedInstance =
+				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
 
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
 		given(instancePowerActionManager.execute(any(Instance.class), eq(action)))
