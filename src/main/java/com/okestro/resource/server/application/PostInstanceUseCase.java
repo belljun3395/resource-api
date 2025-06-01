@@ -3,6 +3,7 @@ package com.okestro.resource.server.application;
 import com.okestro.resource.server.application.dto.*;
 import com.okestro.resource.server.application.service.InstanceSourceService;
 import com.okestro.resource.server.domain.InstanceEntity;
+import com.okestro.resource.server.domain.enums.SourceType;
 import com.okestro.resource.server.domain.model.flavor.Flavor;
 import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.model.instance.NewInstance;
@@ -42,7 +43,7 @@ public class PostInstanceUseCase {
 				NewInstance.create(name, description, host, sourceType, sourceId, flavorId);
 
 		Flavor flavor = findFlavor(flavorId);
-		ImageSource imageSource = findImageSource(newInstance, sourceType, sourceId);
+		ImageSource imageSource = findImageSource(newInstance, sourceId);
 
 		Instance savedInstance =
 				Instance.from(instanceRepository.save(InstanceEntity.createNew(newInstance)));
@@ -58,13 +59,13 @@ public class PostInstanceUseCase {
 				.orElseThrow(() -> new IllegalArgumentException("can not find flavor by id: " + flavorId));
 	}
 
-	private ImageSource findImageSource(NewInstance newInstance, String sourceType, Long sourceId) {
-		return instanceSourceService
-				.find(newInstance.getImageSource())
-				.orElseThrow(
-						() ->
-								new IllegalArgumentException(
-										"can not find image source by type: " + sourceType + ", id: " + sourceId));
+	private ImageSource findImageSource(NewInstance newInstance, Long sourceId) {
+		SourceType sourceType = newInstance.getImageSource().getSourceType();
+		if (sourceType != SourceType.IMAGE) {
+			throw new IllegalArgumentException(
+					"source type must be IMAGE, but got: " + sourceType.name());
+		}
+		return instanceSourceService.find(newInstance.getImageSource()).orElseThrow();
 	}
 
 	private void publishEvent(Instance savedInstance, Flavor flavor, ImageSource imageSource) {
