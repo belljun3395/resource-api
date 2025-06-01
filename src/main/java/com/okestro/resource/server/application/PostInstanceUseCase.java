@@ -52,11 +52,10 @@ public class PostInstanceUseCase {
 	}
 
 	private Flavor findFlavor(Long flavorId) {
-		return Flavor.from(
-				flavorRepository
-						.findById(flavorId)
-						.orElseThrow(
-								() -> new IllegalArgumentException("can not find flavor by id: " + flavorId)));
+		return flavorRepository
+				.findById(flavorId)
+				.map(Flavor::from)
+				.orElseThrow(() -> new IllegalArgumentException("can not find flavor by id: " + flavorId));
 	}
 
 	private ImageSource findImageSource(NewInstance newInstance, String sourceType, Long sourceId) {
