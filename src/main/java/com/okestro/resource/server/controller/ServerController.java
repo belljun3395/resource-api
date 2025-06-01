@@ -1,7 +1,7 @@
 package com.okestro.resource.server.controller;
 
 import com.okestro.resource.server.application.PostInstanceUseCase;
-import com.okestro.resource.server.application.dto.PostInstanceUsecaseDto;
+import com.okestro.resource.server.application.dto.PostInstanceUseCaseDto;
 import com.okestro.resource.server.controller.request.PostInstanceRequest;
 import com.okestro.resource.support.web.ApiResponse;
 import com.okestro.resource.support.web.ApiResponseGenerator;
@@ -19,10 +19,10 @@ public class ServerController {
 	private final PostInstanceUseCase postInstanceUseCase;
 
 	@PostMapping("/instances")
-	public ApiResponse<ApiResponse.SuccessBody<PostInstanceUsecaseDto.PostInstanceUseCaseOut>>
+	public ApiResponse<ApiResponse.SuccessBody<PostInstanceUseCaseDto.PostInstanceUseCaseOut>>
 			postInstance(@RequestBody PostInstanceRequest request) {
-		PostInstanceUsecaseDto.PostInstanceUseCaseOut useCaseOut =
-				postInstanceUseCase.execute(PostInstanceUsecaseDto.in(request));
+		PostInstanceUseCaseDto.PostInstanceUseCaseOut useCaseOut =
+				postInstanceUseCase.execute(PostInstanceUseCaseDto.in(request));
 		return ApiResponseGenerator.success(useCaseOut, HttpStatus.CREATED);
 	}
 }

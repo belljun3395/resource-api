@@ -29,8 +29,8 @@ public class PostInstanceUseCase {
 	private final InstanceSourceService instanceSourceService;
 
 	@Transactional
-	public PostInstanceUsecaseDto.PostInstanceUseCaseOut execute(
-			PostInstanceUsecaseDto.PostInstanceUseCaseIn useCaseIn) {
+	public PostInstanceUseCaseDto.PostInstanceUseCaseOut execute(
+			PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn) {
 		final String name = useCaseIn.getName();
 		final String description = useCaseIn.getDescription();
 		final String host = useCaseIn.getHost();
@@ -48,7 +48,7 @@ public class PostInstanceUseCase {
 				Instance.from(instanceRepository.save(InstanceEntity.createNew(newInstance)));
 
 		publishEvent(savedInstance, flavor, imageSource);
-		return PostInstanceUsecaseDto.out(savedInstance, flavor, imageSource);
+		return PostInstanceUseCaseDto.out(savedInstance, flavor, imageSource);
 	}
 
 	private Flavor findFlavor(Long flavorId) {

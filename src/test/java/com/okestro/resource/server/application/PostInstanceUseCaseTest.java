@@ -2,13 +2,12 @@ package com.okestro.resource.server.application;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.okestro.resource.server.application.dto.PostInstanceUsecaseDto;
+import com.okestro.resource.server.application.dto.PostInstanceUseCaseDto;
 import com.okestro.resource.server.application.service.InstanceSourceService;
 import com.okestro.resource.server.domain.FlavorEntity;
 import com.okestro.resource.server.domain.InstanceEntity;
@@ -77,8 +76,8 @@ class PostInstanceUseCaseTest {
 	@Test
 	void create_new_instance() {
 		// given
-		PostInstanceUsecaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUsecaseDto.PostInstanceUseCaseIn.builder()
+		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
+				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
 						.name("test-instance")
 						.description("This is a test instance")
 						.host("192.168.1.1")
@@ -138,8 +137,8 @@ class PostInstanceUseCaseTest {
 	@Test
 	void fail_to_create_new_instance_cause_not_found_flavor() {
 		// given
-		PostInstanceUsecaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUsecaseDto.PostInstanceUseCaseIn.builder()
+		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
+				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
 						.name("test-instance")
 						.description("This is a test instance")
 						.host("192.168.1.1")
@@ -172,8 +171,8 @@ class PostInstanceUseCaseTest {
 	@Test
 	void fail_to_create_new_instance_cause_not_found_image_source() {
 		// given
-		PostInstanceUsecaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUsecaseDto.PostInstanceUseCaseIn.builder()
+		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
+				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
 						.name("test-instance")
 						.description("This is a test instance")
 						.host("192.168.1.1")

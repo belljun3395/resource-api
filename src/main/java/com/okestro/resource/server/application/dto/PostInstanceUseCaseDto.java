@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class PostInstanceUsecaseDto {
+public class PostInstanceUseCaseDto {
 	public static PostInstanceUseCaseIn in(PostInstanceRequest request) {
 		return PostInstanceUseCaseIn.builder()
 				.name(request.getName())
@@ -33,13 +33,13 @@ public class PostInstanceUsecaseDto {
 				.powerStatus(instance.getPowerStatus().name())
 				.host(instance.getHost().getValue())
 				.source(
-						PostInstanceUsecaseDto.PostInstanceUseCaseOut.PostInstanceSourceDto.builder()
+						PostInstanceUseCaseDto.PostInstanceUseCaseOut.PostInstanceSourceDto.builder()
 								.type(imageSource.getSourceType().name())
 								.id(imageSource.getSourceTargetId())
 								.name(imageSource.getSourceName())
 								.build())
 				.flavor(
-						PostInstanceUsecaseDto.PostInstanceUseCaseOut.InstanceFlavorDto.builder()
+						PostInstanceUseCaseDto.PostInstanceUseCaseOut.InstanceFlavorDto.builder()
 								.id(flavor.getId())
 								.name(flavor.getName())
 								.description(flavor.getDescription())
