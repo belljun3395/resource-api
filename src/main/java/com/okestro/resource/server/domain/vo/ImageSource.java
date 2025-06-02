@@ -5,7 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "sourceName")
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
