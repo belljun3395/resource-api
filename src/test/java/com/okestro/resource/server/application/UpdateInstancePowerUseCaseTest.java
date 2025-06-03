@@ -11,14 +11,11 @@ import com.okestro.resource.server.application.dto.UpdateInstancePowerUsecaseDto
 import com.okestro.resource.server.application.service.power.*;
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.domain.InstanceEntity;
+import com.okestro.resource.server.domain.InstanceEntityFixtures;
 import com.okestro.resource.server.domain.enums.PowerStatus;
-import com.okestro.resource.server.domain.enums.SourceType;
 import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
-import com.okestro.resource.server.domain.vo.ImageSource;
-import com.okestro.resource.server.domain.vo.InstanceAlias;
-import com.okestro.resource.server.domain.vo.InstanceHost;
 import com.okestro.resource.server.event.ServerEventPublisher;
 import com.okestro.resource.server.event.instance.InstanceEvent;
 import com.okestro.resource.server.support.json.ServerJsonConverter;
@@ -79,20 +76,8 @@ class UpdateInstancePowerUseCaseTest {
 		// given
 		Long instanceId = 1L;
 		InstancePowerStatusAction action = InstancePowerStatusAction.START;
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
 		InstanceEntity instanceEntity =
-				InstanceEntity.builder()
-						.id(instanceId)
-						.name("test-instance")
-						.description("This is a test instance")
-						.alias(InstanceAlias.create("test"))
-						.powerStatus(PowerStatus.SHUTDOWN)
-						.host(new InstanceHost("localhost"))
-						.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-						.flavorId(1L)
-						.createdAt(createdDate)
-						.updatedAt(createdDate)
-						.build();
+				InstanceEntityFixtures.giveMeOne().withPowerStatus(PowerStatus.SHUTDOWN).build();
 
 		InstanceEntity updatedInstanceEntity =
 				InstanceEntity.builder()
@@ -138,19 +123,7 @@ class UpdateInstancePowerUseCaseTest {
 		Long instanceId = 1L;
 		InstancePowerStatusAction action = InstancePowerStatusAction.START;
 		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		InstanceEntity instanceEntity =
-				InstanceEntity.builder()
-						.id(instanceId)
-						.name("test-instance")
-						.description("This is a test instance")
-						.alias(InstanceAlias.create("test"))
-						.powerStatus(PowerStatus.RUNNING)
-						.host(new InstanceHost("localhost"))
-						.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-						.flavorId(1L)
-						.createdAt(createdDate)
-						.updatedAt(createdDate)
-						.build();
+		InstanceEntity instanceEntity = InstanceEntityFixtures.giveMeOne().build();
 		Instance instance = Instance.from(instanceEntity);
 
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
@@ -206,18 +179,7 @@ class UpdateInstancePowerUseCaseTest {
 		InstancePowerStatusAction action = InstancePowerStatusAction.START;
 		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
 		InstanceEntity instanceEntity =
-				InstanceEntity.builder()
-						.id(instanceId)
-						.name("test-instance")
-						.description("This is a test instance")
-						.alias(InstanceAlias.create("test"))
-						.powerStatus(PowerStatus.SHUTDOWN)
-						.host(new InstanceHost("localhost"))
-						.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-						.flavorId(1L)
-						.createdAt(createdDate)
-						.updatedAt(createdDate)
-						.build();
+				InstanceEntityFixtures.giveMeOne().withPowerStatus(PowerStatus.SHUTDOWN).build();
 
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
 		given(instancePowerActionManager.execute(any(Instance.class), eq(action)))

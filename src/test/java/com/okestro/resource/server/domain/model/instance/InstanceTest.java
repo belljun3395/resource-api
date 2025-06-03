@@ -3,28 +3,13 @@ package com.okestro.resource.server.domain.model.instance;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
-import com.okestro.resource.server.domain.enums.SourceType;
-import com.okestro.resource.server.domain.vo.ImageSource;
-import com.okestro.resource.server.domain.vo.InstanceAlias;
-import com.okestro.resource.server.domain.vo.InstanceHost;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 class InstanceTest {
 
 	@Test
 	void start_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.SHUTDOWN,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.start();
 
@@ -34,17 +19,7 @@ class InstanceTest {
 
 	@Test
 	void stop_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 
@@ -54,17 +29,7 @@ class InstanceTest {
 
 	@Test
 	void pause_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.pause();
 
@@ -74,16 +39,7 @@ class InstanceTest {
 
 	@Test
 	void shutdown_instance() {
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 

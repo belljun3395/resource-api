@@ -7,14 +7,10 @@ import static org.mockito.Mockito.times;
 
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.domain.InstanceEntity;
+import com.okestro.resource.server.domain.InstanceEntityFixtures;
 import com.okestro.resource.server.domain.enums.PowerStatus;
-import com.okestro.resource.server.domain.enums.SourceType;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
-import com.okestro.resource.server.domain.vo.ImageSource;
-import com.okestro.resource.server.domain.vo.InstanceAlias;
-import com.okestro.resource.server.domain.vo.InstanceHost;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,22 +47,8 @@ class PauseInstancePowerActionServiceTest {
 		// given
 		Long instanceId = 1L;
 		PowerStatus expected = PowerStatus.PAUSED;
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
 		given(instanceRepository.findById(instanceId))
-				.willReturn(
-						Optional.of(
-								InstanceEntity.builder()
-										.id(instanceId)
-										.name("Test Instance")
-										.description("This is a test instance")
-										.alias(InstanceAlias.create("test"))
-										.powerStatus(PowerStatus.RUNNING)
-										.host(new InstanceHost("localhost"))
-										.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-										.flavorId(1L)
-										.createdAt(createdDate)
-										.updatedAt(createdDate)
-										.build()));
+				.willReturn(Optional.of(InstanceEntityFixtures.giveMeOne().withId(instanceId).build()));
 
 		given(instanceRepository.save(Mockito.any(InstanceEntity.class)))
 				.willAnswer(invocation -> invocation.getArgument(0));

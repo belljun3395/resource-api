@@ -6,14 +6,10 @@ import static org.mockito.Mockito.*;
 
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.domain.InstanceEntity;
+import com.okestro.resource.server.domain.InstanceEntityFixtures;
 import com.okestro.resource.server.domain.enums.PowerStatus;
-import com.okestro.resource.server.domain.enums.SourceType;
 import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
-import com.okestro.resource.server.domain.vo.ImageSource;
-import com.okestro.resource.server.domain.vo.InstanceAlias;
-import com.okestro.resource.server.domain.vo.InstanceHost;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -174,20 +170,8 @@ class InstancePowerActionManagerTest {
 	}
 
 	private Instance createTestInstance(PowerStatus powerStatus) {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
 		InstanceEntity instanceEntity =
-				InstanceEntity.builder()
-						.id(1L)
-						.name("test-instance")
-						.description("This is a test instance")
-						.alias(InstanceAlias.create("test"))
-						.powerStatus(powerStatus)
-						.host(new InstanceHost("localhost"))
-						.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-						.flavorId(1L)
-						.createdAt(createdDate)
-						.updatedAt(createdDate)
-						.build();
+				InstanceEntityFixtures.giveMeOne().withPowerStatus(powerStatus).build();
 		return Instance.from(instanceEntity);
 	}
 }
