@@ -10,12 +10,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.okestro.resource.server.application.dto.PostInstanceUseCaseDto;
 import com.okestro.resource.server.application.service.InstanceSourceService;
 import com.okestro.resource.server.domain.FlavorEntity;
+import com.okestro.resource.server.domain.FlavorEntityFixtures;
 import com.okestro.resource.server.domain.InstanceEntity;
-import com.okestro.resource.server.domain.enums.SourceType;
+import com.okestro.resource.server.domain.model.instance.Instance;
+import com.okestro.resource.server.domain.model.instance.InstanceFixtures;
 import com.okestro.resource.server.domain.model.instance.NewInstance;
 import com.okestro.resource.server.domain.repository.FlavorRepository;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
 import com.okestro.resource.server.domain.vo.ImageSource;
+import com.okestro.resource.server.domain.vo.ImageSourceFixtures;
 import com.okestro.resource.server.event.ServerEventPublisher;
 import com.okestro.resource.server.event.instance.InstanceEvent;
 import com.okestro.resource.server.support.json.ServerJsonConverter;
@@ -76,41 +79,36 @@ class PostInstanceUseCaseTest {
 	@Test
 	void create_new_instance() {
 		// given
-		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
-						.name("test-instance")
-						.description("This is a test instance")
-						.host("192.168.1.1")
-						.flavorId(1L)
-						.sourceType("IMAGE")
-						.sourceId(1L)
-						.build();
-		Long flavorId = useCaseIn.getFlavorId();
-		given(flavorRepository.findById(flavorId))
-				.willReturn(
-						Optional.of(
-								FlavorEntity.builder()
-										.id(flavorId)
-										.name("test-flavor")
-										.description("Test flavor description")
-										.vCpu(2.0f)
-										.memory(4096.0f)
-										.rootDiskSize(20.0f)
-										.build()));
-		given(instanceSourceService.find(any(ImageSource.class)))
-				.willReturn(
-						Optional.of(ImageSource.of(SourceType.IMAGE, useCaseIn.getSourceId(), "test-image")));
+		//		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
+		//				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
+		//						.name("test-instance")
+		//						.description("This is a test instance")
+		//						.host("192.168.1.1")
+		//						.flavorId(1L)
+		//						.sourceType("IMAGE")
+		//						.sourceId(1L)
+		//						.build();
+		//		Long flavorId = useCaseIn.getFlavorId();
+		FlavorEntity flavorEntity = FlavorEntityFixtures.giveMeOne().build();
+		given(flavorRepository.findById(anyLong())).willReturn(Optional.of(flavorEntity));
+		ImageSource imageSource = ImageSourceFixtures.giveMeOne().build();
+		given(instanceSourceService.find(any(ImageSource.class))).willReturn(Optional.of(imageSource));
 
+		Instance instance =
+				InstanceFixtures.giveMeOne()
+						.withFlavorId(flavorEntity.getId())
+						.withImageSource(imageSource)
+						.build();
 		given(instanceRepository.save(any(InstanceEntity.class)))
 				.willReturn(
 						InstanceEntity.createNew(
 								NewInstance.create(
-										useCaseIn.getName(),
-										useCaseIn.getDescription(),
-										useCaseIn.getHost(),
-										useCaseIn.getSourceType(),
-										useCaseIn.getSourceId(),
-										flavorId)));
+										instance.getName(),
+										instance.getDescription(),
+										instance.getHost().getValue(),
+										instance.getImageSource().getSourceType().name(),
+										instance.getImageSource().getSourceTargetId(),
+										instance.getFlavorId())));
 
 		willDoNothing()
 				.given(serverEventPublisher)
@@ -120,10 +118,18 @@ class PostInstanceUseCaseTest {
 										.InstanceCreateLogEvent.class));
 
 		// when
-		postInstanceUseCase.execute(useCaseIn);
+		postInstanceUseCase.execute(
+				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
+						.name(instance.getName())
+						.description(instance.getDescription())
+						.host(instance.getHost().getValue())
+						.flavorId(instance.getFlavorId())
+						.sourceType(instance.getImageSource().getSourceType().name())
+						.sourceId(instance.getImageSource().getSourceTargetId())
+						.build());
 
 		// then
-		then(flavorRepository).should(times(1)).findById(flavorId);
+		then(flavorRepository).should(times(1)).findById(anyLong());
 		then(instanceSourceService).should(times(1)).find(any(ImageSource.class));
 		then(instanceRepository).should(times(1)).save(any(InstanceEntity.class));
 		then(serverEventPublisher)
@@ -137,27 +143,25 @@ class PostInstanceUseCaseTest {
 	@Test
 	void fail_to_create_new_instance_cause_not_found_flavor() {
 		// given
-		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
-						.name("test-instance")
-						.description("This is a test instance")
-						.host("192.168.1.1")
-						.flavorId(1L)
-						.sourceType("IMAGE")
-						.sourceId(1L)
-						.build();
-		Long flavorId = useCaseIn.getFlavorId();
-		given(flavorRepository.findById(flavorId)).willReturn(Optional.empty());
+		given(flavorRepository.findById(anyLong())).willReturn(Optional.empty());
 
 		// when
 		assertThrows(
 				RuntimeException.class,
 				() -> {
-					postInstanceUseCase.execute(useCaseIn);
+					postInstanceUseCase.execute(
+							PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
+									.name("test-instance")
+									.description("This is a test instance")
+									.host("192.168.1.1")
+									.flavorId(1L)
+									.sourceType("IMAGE")
+									.sourceId(1L)
+									.build());
 				});
 
 		// then
-		then(flavorRepository).should(times(1)).findById(flavorId);
+		then(flavorRepository).should(times(1)).findById(anyLong());
 		then(instanceSourceService).should(notCalled).find(any(ImageSource.class));
 		then(instanceRepository).should(notCalled).save(any(InstanceEntity.class));
 		then(serverEventPublisher)
@@ -171,38 +175,27 @@ class PostInstanceUseCaseTest {
 	@Test
 	void fail_to_create_new_instance_cause_not_found_image_source() {
 		// given
-		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
-				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
-						.name("test-instance")
-						.description("This is a test instance")
-						.host("192.168.1.1")
-						.flavorId(1L)
-						.sourceType("IMAGE")
-						.sourceId(1L)
-						.build();
-		Long flavorId = useCaseIn.getFlavorId();
-		given(flavorRepository.findById(flavorId))
-				.willReturn(
-						Optional.of(
-								FlavorEntity.builder()
-										.id(flavorId)
-										.name("test-flavor")
-										.description("Test flavor description")
-										.vCpu(2.0f)
-										.memory(4096.0f)
-										.rootDiskSize(20.0f)
-										.build()));
+		given(flavorRepository.findById(anyLong()))
+				.willReturn(Optional.of(FlavorEntityFixtures.giveMeOne().build()));
 		given(instanceSourceService.find(any(ImageSource.class))).willReturn(Optional.empty());
 
 		// when
 		assertThrows(
 				RuntimeException.class,
 				() -> {
-					postInstanceUseCase.execute(useCaseIn);
+					postInstanceUseCase.execute(
+							PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
+									.name("test-instance")
+									.description("This is a test instance")
+									.host("192.168.1.1")
+									.flavorId(1L)
+									.sourceType("IMAGE")
+									.sourceId(1L)
+									.build());
 				});
 
 		// then
-		then(flavorRepository).should(times(1)).findById(flavorId);
+		then(flavorRepository).should(times(1)).findById(anyLong());
 		then(instanceSourceService).should(times(1)).find(any(ImageSource.class));
 		then(instanceRepository).should(notCalled).save(any(InstanceEntity.class));
 		then(serverEventPublisher)
