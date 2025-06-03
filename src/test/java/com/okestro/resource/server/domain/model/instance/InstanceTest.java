@@ -24,15 +24,12 @@ class InstanceTest {
 						new InstanceHost("localhost"),
 						ImageSource.create(SourceType.IMAGE, 1L),
 						1L,
-						1L,
-						createdDate,
-						createdDate);
+						1L);
 
 		UpdatedInstance updatedInstance = instance.start();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.RUNNING, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
@@ -47,15 +44,12 @@ class InstanceTest {
 						new InstanceHost("localhost"),
 						ImageSource.create(SourceType.IMAGE, 1L),
 						1L,
-						1L,
-						createdDate,
-						createdDate);
+						1L);
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.SHUTDOWN, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
@@ -70,15 +64,12 @@ class InstanceTest {
 						new InstanceHost("localhost"),
 						ImageSource.create(SourceType.IMAGE, 1L),
 						1L,
-						1L,
-						createdDate,
-						createdDate);
+						1L);
 
 		UpdatedInstance updatedInstance = instance.pause();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.PAUSED, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
@@ -92,14 +83,11 @@ class InstanceTest {
 						new InstanceHost("localhost"),
 						ImageSource.create(SourceType.IMAGE, 1L),
 						1L,
-						1L,
-						LocalDateTime.now().minusMinutes(10),
-						LocalDateTime.now().minusMinutes(10));
+						1L);
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.SHUTDOWN, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 }
