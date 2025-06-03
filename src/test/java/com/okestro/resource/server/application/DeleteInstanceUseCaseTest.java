@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.okestro.resource.server.application.dto.DeleteInstanceUseCaseDto;
 import com.okestro.resource.server.domain.InstanceEntity;
+import com.okestro.resource.server.domain.InstanceEntityFixtures;
 import com.okestro.resource.server.domain.enums.PowerStatus;
 import com.okestro.resource.server.domain.enums.SourceType;
 import com.okestro.resource.server.domain.repository.InstanceRepository;
@@ -75,19 +76,7 @@ class DeleteInstanceUseCaseTest {
 		DeleteInstanceUseCaseDto.DeleteInstanceUseCaseIn useCaseIn =
 				new DeleteInstanceUseCaseDto.DeleteInstanceUseCaseIn(1L);
 
-		given(instanceRepository.findById(anyLong()))
-				.willReturn(
-						Optional.of(
-								InstanceEntity.builder()
-										.id(1L)
-										.name("Test Instance")
-										.description("Test Instance Description")
-										.alias(InstanceAlias.create("test"))
-										.powerStatus(PowerStatus.RUNNING)
-										.host(new InstanceHost("localhost"))
-										.flavorId(1L)
-										.imageSource(ImageSource.create(SourceType.IMAGE, 1L))
-										.build()));
+		given(instanceRepository.findById(anyLong())).willReturn(Optional.of(InstanceEntityFixtures.giveMeOne().build()));
 
 		given(instanceRepository.save(any(InstanceEntity.class)))
 				.willAnswer(invocation -> invocation.getArgument(0));

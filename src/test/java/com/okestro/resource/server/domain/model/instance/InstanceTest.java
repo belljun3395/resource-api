@@ -15,91 +15,42 @@ class InstanceTest {
 	@Test
 	void start_instance() {
 		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.SHUTDOWN,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L,
-						createdDate,
-						createdDate);
+		Instance instance = InstanceFixtures.giveMeOne()
+				.build();
 
 		UpdatedInstance updatedInstance = instance.start();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.RUNNING, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
 	void stop_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L,
-						createdDate,
-						createdDate);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.SHUTDOWN, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
 	void pause_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L,
-						createdDate,
-						createdDate);
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.pause();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.PAUSED, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 
 	@Test
 	void shutdown_instance() {
-		Instance instance =
-				new Instance(
-						"Test Instance",
-						"This is a test instance",
-						InstanceAlias.create("test"),
-						PowerStatus.RUNNING,
-						new InstanceHost("localhost"),
-						ImageSource.create(SourceType.IMAGE, 1L),
-						1L,
-						1L,
-						LocalDateTime.now().minusMinutes(10),
-						LocalDateTime.now().minusMinutes(10));
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.shutdown();
 
 		assertNotNull(updatedInstance);
 		assertSame(PowerStatus.SHUTDOWN, updatedInstance.getPowerStatus());
-		assertNull(updatedInstance.getUpdatedAt());
 	}
 }
