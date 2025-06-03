@@ -18,9 +18,8 @@ public class ShutDownInstance extends UpdatedInstance {
 			InstanceHost host,
 			ImageSource imageSource,
 			Long flavorId,
-			Long id,
-			LocalDateTime createdAt) {
-		super(name, description, alias, powerStatus, host, imageSource, flavorId, id, createdAt);
+			Long id) {
+		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
 	}
 
 	public static ShutDownInstance of(Instance instance) {
@@ -32,8 +31,7 @@ public class ShutDownInstance extends UpdatedInstance {
 				instance.getHost(),
 				instance.getImageSource(),
 				instance.getFlavorId(),
-				instance.getId(),
-				instance.getCreatedAt());
+				instance.getId());
 	}
 
 	public static ShutDownInstance from(InstanceEntity entity) {
@@ -50,8 +48,7 @@ public class ShutDownInstance extends UpdatedInstance {
 				entity.getHost(),
 				entity.getImageSource(),
 				entity.getFlavorId(),
-				entity.getId(),
-				entity.getCreatedAt());
+				entity.getId());
 	}
 
 	public DeleteInstance delete() {

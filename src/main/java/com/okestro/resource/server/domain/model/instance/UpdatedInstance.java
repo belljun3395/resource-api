@@ -18,10 +18,9 @@ public class UpdatedInstance extends Instance {
 			InstanceHost host,
 			ImageSource imageSource,
 			Long flavorId,
-			Long id,
-			LocalDateTime createdAt) {
+			Long id) {
 		// updatedAt is set to null because it is set by the repository layer
-		super(name, description, alias, powerStatus, host, imageSource, flavorId, id, createdAt, null);
+		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
 	}
 
 	public static UpdatedInstance of(Instance instance, PowerStatus powerStatus) {
@@ -33,8 +32,7 @@ public class UpdatedInstance extends Instance {
 				instance.getHost(),
 				instance.getImageSource(),
 				instance.getFlavorId(),
-				instance.getId(),
-				instance.getCreatedAt());
+				instance.getId());
 	}
 
 	public static UpdatedInstance from(InstanceEntity entity) {
@@ -46,7 +44,6 @@ public class UpdatedInstance extends Instance {
 				entity.getHost(),
 				entity.getImageSource(),
 				entity.getFlavorId(),
-				entity.getId(),
-				entity.getCreatedAt());
+				entity.getId());
 	}
 }

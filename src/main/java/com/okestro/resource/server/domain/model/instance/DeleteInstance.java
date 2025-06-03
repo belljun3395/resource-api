@@ -19,9 +19,8 @@ public class DeleteInstance extends UpdatedInstance {
 			InstanceHost host,
 			ImageSource imageSource,
 			Long flavorId,
-			Long id,
-			LocalDateTime createdAt) {
-		super(name, description, alias, powerStatus, host, imageSource, flavorId, id, createdAt);
+			Long id) {
+		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
 	}
 
 	public static DeleteInstance of(ShutDownInstance instance) {
@@ -33,8 +32,7 @@ public class DeleteInstance extends UpdatedInstance {
 				instance.getHost(),
 				instance.getImageSource(),
 				instance.getFlavorId(),
-				instance.getId(),
-				instance.getCreatedAt());
+				instance.getId());
 	}
 
 	public void failToDelete() {
