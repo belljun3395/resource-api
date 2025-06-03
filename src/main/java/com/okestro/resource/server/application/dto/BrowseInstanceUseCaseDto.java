@@ -5,6 +5,7 @@ import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.vo.ImageSource;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class BrowseInstanceUseCaseDto {
 
 	public static BrowseInstanceUseCaseOut.InstanceDto map(
 			Instance instance, Flavor flavor, ImageSource imageSource) {
+		String sourceName = Objects.requireNonNullElse(imageSource.getSourceName(), "");
 		return BrowseInstanceUseCaseOut.InstanceDto.builder()
 				.id(instance.getId())
 				.name(instance.getName())
@@ -45,7 +47,7 @@ public class BrowseInstanceUseCaseDto {
 						BrowseInstanceUseCaseOut.PostInstanceSourceDto.builder()
 								.type(imageSource.getSourceType().name())
 								.id(imageSource.getSourceTargetId())
-								.name(imageSource.getSourceName())
+								.name(sourceName)
 								.build())
 				.flavor(
 						BrowseInstanceUseCaseOut.InstanceFlavorDto.builder()
