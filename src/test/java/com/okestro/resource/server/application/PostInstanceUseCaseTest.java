@@ -79,16 +79,6 @@ class PostInstanceUseCaseTest {
 	@Test
 	void create_new_instance() {
 		// given
-		//		PostInstanceUseCaseDto.PostInstanceUseCaseIn useCaseIn =
-		//				PostInstanceUseCaseDto.PostInstanceUseCaseIn.builder()
-		//						.name("test-instance")
-		//						.description("This is a test instance")
-		//						.host("192.168.1.1")
-		//						.flavorId(1L)
-		//						.sourceType("IMAGE")
-		//						.sourceId(1L)
-		//						.build();
-		//		Long flavorId = useCaseIn.getFlavorId();
 		FlavorEntity flavorEntity = FlavorEntityFixtures.giveMeOne().build();
 		given(flavorRepository.findById(anyLong())).willReturn(Optional.of(flavorEntity));
 		ImageSource imageSource = ImageSourceFixtures.giveMeOne().build();
