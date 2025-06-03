@@ -77,6 +77,7 @@ dependencies {
 
     // validation
     implementation "javax.validation:validation-api:${validationApiVersion}"
+    implementation 'ru.lanwen.verbalregex:java-verbal-expressions:1.8'
 
     // nullaway
     errorprone "com.uber.nullaway:nullaway:${nullawayVersion}"
