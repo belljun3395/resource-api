@@ -5,6 +5,7 @@ import com.okestro.resource.server.domain.model.flavor.Flavor;
 import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.vo.ImageSource;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class PostInstanceUseCaseDto {
 
 	public static PostInstanceUseCaseOut out(
 			Instance instance, Flavor flavor, ImageSource imageSource) {
+		String sourceName = Objects.requireNonNullElse(imageSource.getSourceName(), "");
 		return PostInstanceUseCaseOut.builder()
 				.id(instance.getId())
 				.name(instance.getName())
@@ -33,10 +35,10 @@ public class PostInstanceUseCaseDto {
 				.powerStatus(instance.getPowerStatus().name())
 				.host(instance.getHost().getValue())
 				.source(
-						PostInstanceUseCaseDto.PostInstanceUseCaseOut.PostInstanceSourceDto.builder()
+						PostInstanceUseCaseOut.PostInstanceSourceDto.builder()
 								.type(imageSource.getSourceType().name())
 								.id(imageSource.getSourceTargetId())
-								.name(imageSource.getSourceName())
+								.name(sourceName)
 								.build())
 				.flavor(
 						PostInstanceUseCaseDto.PostInstanceUseCaseOut.InstanceFlavorDto.builder()
