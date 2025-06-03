@@ -93,9 +93,21 @@ class UpdateInstancePowerUseCaseTest {
 						.createdAt(createdDate)
 						.updatedAt(createdDate)
 						.build();
-		Instance instance = Instance.from(instanceEntity);
-		UpdatedInstance updatedInstance =
-				UpdatedInstance.of(instance, InstancePowerStatusActionSupporter.getPowerStatus(action));
+
+		InstanceEntity updatedInstanceEntity =
+				InstanceEntity.builder()
+						.id(instanceEntity.getId())
+						.name(instanceEntity.getName())
+						.description(instanceEntity.getDescription())
+						.alias(instanceEntity.getAlias())
+						.powerStatus(PowerStatus.RUNNING)
+						.host(instanceEntity.getHost())
+						.imageSource(instanceEntity.getImageSource())
+						.flavorId(instanceEntity.getFlavorId())
+						.createdAt(instanceEntity.getCreatedAt())
+						.updatedAt(LocalDateTime.now())
+						.build();
+		UpdatedInstance updatedInstance = UpdatedInstance.from(updatedInstanceEntity);
 
 		given(instanceRepository.findById(instanceId)).willReturn(Optional.of(instanceEntity));
 		given(instancePowerActionManager.execute(any(Instance.class), eq(action)))
