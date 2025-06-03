@@ -9,7 +9,7 @@ public class Flavor extends BaseFlavor {
 	private final Long id;
 	private final LocalDateTime createdAt;
 
-	private Flavor(
+	protected Flavor(
 			String name,
 			String description,
 			Float vCpu,
