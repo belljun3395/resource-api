@@ -3,7 +3,6 @@ package com.okestro.resource.server.application.dto;
 import com.okestro.resource.server.controller.request.InstancePowerStatusAction;
 import com.okestro.resource.server.controller.request.UpdateInstancePowerRequest;
 import com.okestro.resource.server.domain.model.instance.Instance;
-import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +25,6 @@ public class UpdateInstancePowerUsecaseDto {
 				.alias(instance.getAlias().getValue())
 				.powerStatus(instance.getPowerStatus().name())
 				.host(instance.getHost().getValue())
-				.updatedAt(instance.getUpdatedAt())
 				.build();
 	}
 
@@ -50,6 +48,5 @@ public class UpdateInstancePowerUsecaseDto {
 		@NotNull private String alias;
 		@NotNull private String powerStatus;
 		@NotNull private String host;
-		@NotNull private LocalDateTime updatedAt;
 	}
 }
