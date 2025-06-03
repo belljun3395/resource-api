@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'org.springframework.boot' version '3.3.11'
     id 'io.spring.dependency-management' version '1.1.7'
     id "com.diffplug.spotless" version "6.8.0"
     id "org.springdoc.openapi-gradle-plugin" version "1.9.0"
+    id "net.ltgt.errorprone" version '4.2.0'
 }
 
 group = 'com.okestro'
@@ -34,6 +36,9 @@ ext {
     set('validationApiVersion', "2.0.1.Final")
     set('commonsIoVersion', "2.19.0")
     set('springdocVersion', "2.3.0")
+    set('nullawayVersion', "0.12.7")
+    set('errorProneVersion', "2.38.0")
+    set('jspecifyVersion', "1.0.0")
 }
 
 dependencies {
@@ -71,6 +76,11 @@ dependencies {
 
     // validation
     implementation "javax.validation:validation-api:${validationApiVersion}"
+
+    // nullaway
+    errorprone "com.uber.nullaway:nullaway:${nullawayVersion}"
+    api "org.jspecify:jspecify:${jspecifyVersion}"
+    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -144,5 +154,23 @@ tasks.register("compileQClass") {
     dependsOn("compileJava")
     doLast {
         println("QueryDSL classes compiled without running tests.")
+    }
+}
+import net.ltgt.gradle.errorprone.CheckSeverity
+
+def basePackage = "${group}.resource"
+tasks.withType(JavaCompile) {
+    options.errorprone {
+        check("NullAway", CheckSeverity.ERROR)
+        option("NullAway:AnnotatedPackages", "${basePackage}")
+        option("NullAway:UnannotatedSubPackages", "${basePackage}.config,${basePackage}.support")
+        option("NullAway:ExcludedClassAnnotations", "javax.annotation.processing.Generated,jakarta.persistence.Embeddable,jakarta.persistence.Entity")
+    }
+
+    // Include to disable NullAway on test code
+    if (name.toLowerCase().contains("test")) {
+        options.errorprone {
+            disable("NullAway")
+        }
     }
 }

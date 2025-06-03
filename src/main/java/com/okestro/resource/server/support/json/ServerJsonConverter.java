@@ -7,6 +7,7 @@ import com.okestro.resource.server.domain.model.instance.Instance;
 import com.okestro.resource.server.domain.vo.ImageSource;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,10 @@ public class ServerJsonConverter {
 	private final ObjectMapper objectMapper;
 
 	public ServerActionJson toJson(
-			ServerAction action, Instance instance, Flavor flavor, ImageSource imageSource) {
+			ServerAction action,
+			Instance instance,
+			@Nullable Flavor flavor,
+			@Nullable ImageSource imageSource) {
 		ObjectNode json = objectMapper.createObjectNode();
 		json.put(ACTION_KEY, action.name());
 
