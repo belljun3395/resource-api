@@ -83,8 +83,6 @@ public class InstanceEntity {
 				.host(instance.getHost())
 				.flavorId(instance.getFlavorId())
 				.imageSource(instance.getImageSource())
-				.createdAt(instance.getCreatedAt())
-				.updatedAt(instance.getUpdatedAt())
 				.build();
 	}
 
