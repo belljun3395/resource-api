@@ -45,7 +45,7 @@ public final class InstanceSnapshotEntityFixtures {
 	}
 
 	public static InstanceSnapshotEntityFixtures giveMeOne() {
-		int id = new Random().nextInt(100);
+		int id = new Random().nextInt(100) + 1; // Random ID between 1 and 100
 		return anInstanceSnapshotEntity()
 				.withId((long) id)
 				.withInstanceId((long) id)

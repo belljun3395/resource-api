@@ -45,7 +45,7 @@ public final class InstanceActiveLogEntityFixtures {
 	}
 
 	public static InstanceActiveLogEntityFixtures giveMeOne() {
-		int id = new Random().nextInt(100);
+		int id = new Random().nextInt(100) + 1; // Random ID between 1 and 100
 		return anInstanceActiveLogEntity()
 				.withId((long) id)
 				.withInstanceId((long) id)
