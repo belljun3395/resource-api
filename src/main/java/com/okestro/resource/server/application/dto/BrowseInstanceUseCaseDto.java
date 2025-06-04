@@ -58,7 +58,6 @@ public class BrowseInstanceUseCaseDto {
 								.memory(flavor.getMemory())
 								.rootDisk(flavor.getRootDiskSize())
 								.build())
-				.createdAt(instance.getCreatedAt())
 				.build();
 	}
 
