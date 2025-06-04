@@ -40,6 +40,7 @@ ext {
     set('nullawayVersion', "0.12.7")
     set('errorProneVersion', "2.38.0")
     set('jspecifyVersion', "1.0.0")
+    set('bucket4jVersion', "8.14.0")
 }
 
 dependencies {
@@ -66,6 +67,10 @@ dependencies {
 
     /** docs */
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+
+    // bucket4j
+    implementation "com.bucket4j:bucket4j_jdk17-redis-common:${bucket4jVersion}"
+    implementation "com.bucket4j:bucket4j_jdk17-lettuce:${bucket4jVersion}"
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
