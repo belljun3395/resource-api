@@ -1,0 +1,51 @@
+spring:
+    datasource:
+        write:
+            hikari:
+                jdbcUrl: jdbc:mariadb://localhost:13306/resources_api
+                username: root
+                password: root
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-WRITE-POOL
+                minimum-idle: 4
+                maximum-pool-size: 10
+                connection-timeout: 30000
+                idle-timeout: 300000
+                max-lifetime: 1800000
+                connection-test-query: SELECT 1
+        read:
+            hikari:
+                jdbcUrl: jdbc:mariadb://localhost:23306/resources_api
+                username: root
+                password: root
+                driver-class-name: org.mariadb.jdbc.Driver
+                pool-name: API-READ-POOL
+                minimum-idle: 4
+                maximum-pool-size: 10
+                connection-timeout: 30000
+                idle-timeout: 300000
+                max-lifetime: 1800000
+                connection-test-query: SELECT 1
+    flyway:
+        locations: classpath:db/migration/entity
+        sql-migration-suffixes: sql
+        baseline-on-migrate: true
+        baseline-version: 0
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MariaDBDialect
+                hbm2ddl:
+                    jdbc_metadata_extraction_strategy: individually
+                format_sql: true # SQL  정렬
+                highlight_sql: true # 색상 적용
+                use_sql_comments: true # JPQL 주석 표시
+                order_inserts: true
+                order_updates: true
+                jdbc:
+                    batch_size: 500
+                    fetch_size: 500
+                    batch_versioned_data: true
+        show-sql: true
