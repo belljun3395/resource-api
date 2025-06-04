@@ -35,4 +35,20 @@ public class Instance extends BaseInstance {
 				instanceEntity.getFlavorId(),
 				instanceEntity.getId());
 	}
+
+	public UpdatedInstance start() {
+		return updatePowerStatus(PowerStatus.RUNNING);
+	}
+
+	public UpdatedInstance shutdown() {
+		return updatePowerStatus(PowerStatus.SHUTDOWN);
+	}
+
+	public UpdatedInstance pause() {
+		return updatePowerStatus(PowerStatus.PAUSED);
+	}
+
+	private UpdatedInstance updatePowerStatus(PowerStatus powerStatus) {
+		return UpdatedInstance.of(this, powerStatus);
+	}
 }
