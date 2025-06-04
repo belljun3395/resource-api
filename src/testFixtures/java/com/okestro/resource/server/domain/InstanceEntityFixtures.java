@@ -98,7 +98,8 @@ public final class InstanceEntityFixtures {
 	}
 
 	public static InstanceEntityFixtures giveMeOne() {
-		int id = new Random().nextInt(100);
+		int id = new Random().nextInt(100) + 1; // Ensure id is not zero
+		int flavorId = new Random().nextInt(10) + 1; // Ensure flavorId is not zero
 		return anInstanceEntity()
 				.withId((long) id)
 				.withName("test-Instance-" + id)
@@ -106,7 +107,7 @@ public final class InstanceEntityFixtures {
 				.withAlias(InstanceAlias.create("test" + id))
 				.withPowerStatus(PowerStatus.RUNNING)
 				.withHost(new InstanceHost("localhost"))
-				.withFlavorId(1L)
+				.withFlavorId((long) flavorId)
 				.withImageSource(ImageSource.create(SourceType.IMAGE, (long) id))
 				.withCreatedAt(LocalDateTime.now())
 				.withUpdatedAt(LocalDateTime.now())

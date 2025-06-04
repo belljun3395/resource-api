@@ -68,7 +68,7 @@ public final class InstanceFixtures {
 	}
 
 	public static InstanceFixtures giveMeOne() {
-		int id = new Random().nextInt(100);
+		int id = new Random().nextInt(100) + 1; // Ensure id is not zero
 		return anInstance()
 				.withId(1L)
 				.withName("test-Instance-" + id)

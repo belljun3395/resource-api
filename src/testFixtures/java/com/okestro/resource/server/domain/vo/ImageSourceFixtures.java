@@ -37,7 +37,7 @@ public final class ImageSourceFixtures {
 	}
 
 	public static ImageSourceFixtures giveMeOne() {
-		long id = new Random().nextInt(100);
+		long id = new Random().nextInt(100) + 1; // Random ID between 1 and 100
 		return anImageSource()
 				.withSourceType(SourceType.IMAGE)
 				.withSourceTargetId(id)

@@ -58,10 +58,10 @@ public final class FlavorEntityFixtures {
 	}
 
 	public static FlavorEntityFixtures giveMeOne() {
-		int id = new Random().nextInt(100);
-		float vCpu = new Random().nextFloat(10);
-		float memory = new Random().nextFloat(100);
-		float rootDiskSize = new Random().nextFloat(500);
+		int id = new Random().nextInt(100) +1; // Random ID between 1 and 100
+		float vCpu = new Random().nextFloat(10) +1; // // Random vCPU between 1 and 10
+		float memory = new Random().nextFloat(100) +1; // // Random memory between 1 and 100 GB
+		float rootDiskSize = new Random().nextFloat(500) +1; // // Random root disk size between 1 and 500 GB
 		return aFlavorEntity()
 				.withId((long) id)
 				.withName("test-flavor-" + id)
