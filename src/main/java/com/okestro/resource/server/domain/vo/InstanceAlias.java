@@ -14,9 +14,9 @@ public class InstanceAlias {
 	private static final VerbalExpression REGEX =
 			VerbalExpression.regex()
 					.startOfLine()
-					.then("[a-zA-Z0-9]+") // key part
-					.then(SPLIT_REGEX) // underscore separator
-					.then("[0-9]{1,4}") // random number part
+					.add("[a-zA-Z0-9]+")
+					.then(SPLIT_REGEX)
+					.add("[0-9]{1,4}")
 					.endOfLine()
 					.build();
 	private final String value;
