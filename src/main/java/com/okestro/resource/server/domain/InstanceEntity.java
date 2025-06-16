@@ -1,6 +1,7 @@
 package com.okestro.resource.server.domain;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
+import com.okestro.resource.server.domain.model.instance.NewInstance;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.support.InstanceAliasConverter;
 import com.okestro.resource.server.domain.support.InstanceHostConverter;
@@ -83,6 +84,18 @@ public class InstanceEntity {
 				.host(instance.getHost())
 				.flavorId(instance.getFlavorId())
 				.imageSource(instance.getImageSource())
+				.build();
+	}
+
+	public static InstanceEntity createNew(NewInstance newInstance) {
+		return InstanceEntity.builder()
+				.name(newInstance.getName())
+				.description(newInstance.getDescription())
+				.alias(newInstance.getAlias())
+				.powerStatus(PowerStatus.RUNNING)
+				.host(newInstance.getHost())
+				.flavorId(newInstance.getFlavorId())
+				.imageSource(newInstance.getImageSource())
 				.build();
 	}
 

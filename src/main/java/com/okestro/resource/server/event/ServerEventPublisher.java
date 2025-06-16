@@ -15,4 +15,10 @@ public class ServerEventPublisher {
 					event) {
 		applicationEventPublisher.publishEvent(event);
 	}
+
+	public void publishEvent(
+			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceCreateLogEvent
+					event) {
+		applicationEventPublisher.publishEvent(event);
+	}
 }

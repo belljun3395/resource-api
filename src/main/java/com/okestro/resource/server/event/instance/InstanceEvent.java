@@ -31,5 +31,11 @@ public abstract class InstanceEvent {
 				super(id, json);
 			}
 		}
+
+		public static class InstanceCreateLogEvent extends InstanceTransactionLogEvent {
+			public InstanceCreateLogEvent(Long id, ServerActionJson json) {
+				super(id, json);
+			}
+		}
 	}
 }
