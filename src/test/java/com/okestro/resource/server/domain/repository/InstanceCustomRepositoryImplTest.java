@@ -37,10 +37,10 @@ import org.springframework.test.context.TestPropertySource;
 		})
 @Import({InstanceCustomRepositoryImpl.class, FlywayConfig.class, JpaDataSourceConfig.class})
 class InstanceCustomRepositoryImplTest {
-	private static final Long TEST_DATA_COUNT_100_TO_110 = (long) (100 + new Random().nextInt(11));
-	private static final Integer TEST_PAGE_SIZE_100_TO_110 = 10;
-	private static final Integer TEST_LAST_PAGE_LEFT_ELEMENTS_100_TO_110 =
-			TEST_DATA_COUNT_100_TO_110.intValue() % TEST_PAGE_SIZE_100_TO_110;
+	private static final Long TEST_DATA_COUNT_100_TO_109 = (long) (100 + new Random().nextInt(10));
+	private static final Integer TEST_PAGE_SIZE_100_TO_109 = 10;
+	private static final Integer TEST_LAST_PAGE_LEFT_ELEMENTS_100_TO_109 =
+			TEST_DATA_COUNT_100_TO_109.intValue() % TEST_PAGE_SIZE_100_TO_109;
 
 	@Qualifier("instanceCustomRepositoryImpl")
 	@Autowired
@@ -80,7 +80,7 @@ class InstanceCustomRepositoryImplTest {
 			}
 
 			for (String insertTemplate : insertStatements) {
-				for (int i = 1; i <= TEST_DATA_COUNT_100_TO_110; i++) {
+				for (int i = 1; i <= TEST_DATA_COUNT_100_TO_109; i++) {
 					String insertSql = insertTemplate.replaceAll("\\bi\\b", String.valueOf(i));
 					statement.execute(insertSql);
 				}
@@ -98,10 +98,10 @@ class InstanceCustomRepositoryImplTest {
 		Page<InstanceEntity> resultPage = instanceCustomRepository.search(pageable);
 
 		// then
-		int totalPages = (int) Math.ceil((double) TEST_DATA_COUNT_100_TO_110 / pageSize);
+		int totalPages = (int) Math.ceil((double) TEST_DATA_COUNT_100_TO_109 / pageSize);
 		assertThat(resultPage).isNotNull();
 		assertThat(resultPage.getTotalPages()).isEqualTo(totalPages); // 전체 페이지 수: 총 요소 개수 / 페이지 크기
-		assertThat(resultPage.getTotalElements()).isEqualTo(TEST_DATA_COUNT_100_TO_110); // 전체 요소 개수
+		assertThat(resultPage.getTotalElements()).isEqualTo(TEST_DATA_COUNT_100_TO_109); // 전체 요소 개수
 		assertThat(resultPage.getNumber()).isEqualTo(pageNumber); // 현재 페이지 번호
 		assertThat(resultPage.getSize()).isEqualTo(pageSize); // 현재 페이지 크기
 		assertThat(resultPage.getNumberOfElements()).isEqualTo(numberOfElements); // 현재 페이지 요소 개수
@@ -109,19 +109,19 @@ class InstanceCustomRepositoryImplTest {
 
 	static List<Object[]> searchPageProvider() {
 		int totalPages =
-				(int) Math.ceil((double) TEST_DATA_COUNT_100_TO_110 / TEST_PAGE_SIZE_100_TO_110);
+				(int) Math.ceil((double) TEST_DATA_COUNT_100_TO_109 / TEST_PAGE_SIZE_100_TO_109);
 		List<Object[]> params = new ArrayList<>();
 		// until the last page, all pages have the same size
 		for (int i = 0; i < totalPages - 1; i++) {
-			params.add(new Object[] {i, TEST_PAGE_SIZE_100_TO_110, TEST_PAGE_SIZE_100_TO_110});
+			params.add(new Object[] {i, TEST_PAGE_SIZE_100_TO_109, TEST_PAGE_SIZE_100_TO_109});
 		}
 		// the last page may have fewer elements
 		params.add(
 				new Object[] {
-					totalPages - 1, TEST_PAGE_SIZE_100_TO_110, TEST_LAST_PAGE_LEFT_ELEMENTS_100_TO_110
+					totalPages - 1, TEST_PAGE_SIZE_100_TO_109, TEST_LAST_PAGE_LEFT_ELEMENTS_100_TO_109
 				});
 		// over total pages, it should return an empty page
-		params.add(new Object[] {totalPages, TEST_PAGE_SIZE_100_TO_110, 0});
+		params.add(new Object[] {totalPages, TEST_PAGE_SIZE_100_TO_109, 0});
 		return params;
 	}
 }
