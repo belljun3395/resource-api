@@ -65,7 +65,7 @@ public class InstanceEntity {
 
 	@NonNull @Embedded private ImageSource imageSource;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
 	private LocalDateTime createdAt;
 
