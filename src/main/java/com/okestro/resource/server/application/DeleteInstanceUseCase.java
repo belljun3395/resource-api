@@ -13,14 +13,11 @@ import com.okestro.resource.server.event.instance.InstanceEvent;
 import com.okestro.resource.server.support.json.ServerAction;
 import com.okestro.resource.server.support.json.ServerActionJson;
 import com.okestro.resource.server.support.json.ServerJsonConverter;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.errorprone.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.errorprone.checker.nullness.qual.RequiresNonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -96,8 +93,9 @@ public class DeleteInstanceUseCase {
 							.InstanceDeleteLogEvent(instance.getId(), serverActionJson);
 		}
 
-        Objects.requireNonNull(logEvent, "Log event should not be null for server action: " + serverAction);
-        serverEventPublisher.publishEvent(logEvent);
+		Objects.requireNonNull(
+				logEvent, "Log event should not be null for server action: " + serverAction);
+		serverEventPublisher.publishEvent(logEvent);
 	}
 
 	private void publishDeleteInstanceCommandForRetry(Instance instance) {

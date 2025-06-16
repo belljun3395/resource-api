@@ -3,20 +3,13 @@ package com.okestro.resource.server.domain.model.instance;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
-import com.okestro.resource.server.domain.enums.SourceType;
-import com.okestro.resource.server.domain.vo.ImageSource;
-import com.okestro.resource.server.domain.vo.InstanceAlias;
-import com.okestro.resource.server.domain.vo.InstanceHost;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 class InstanceTest {
 
 	@Test
 	void start_instance() {
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(10);
-		Instance instance = InstanceFixtures.giveMeOne()
-				.build();
+		Instance instance = InstanceFixtures.giveMeOne().build();
 
 		UpdatedInstance updatedInstance = instance.start();
 

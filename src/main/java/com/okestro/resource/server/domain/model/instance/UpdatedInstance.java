@@ -7,9 +7,14 @@ import com.okestro.resource.server.domain.vo.InstanceAlias;
 import com.okestro.resource.server.domain.vo.InstanceHost;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 @Getter
 public class UpdatedInstance extends Instance {
+	@Nullable private LocalDateTime createdAt;
+	@Nullable private LocalDateTime updatedAt;
+
 	public UpdatedInstance(
 			String name,
 			String description,
@@ -23,6 +28,30 @@ public class UpdatedInstance extends Instance {
 		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
 	}
 
+	public UpdatedInstance(
+			String name,
+			String description,
+			InstanceAlias alias,
+			PowerStatus powerStatus,
+			InstanceHost host,
+			ImageSource imageSource,
+			Long flavorId,
+			Long id,
+			@NonNull LocalDateTime createdAt,
+			@NonNull LocalDateTime updatedAt) {
+		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+	public static boolean isPersisted(UpdatedInstance instance) {
+		return instance.getCreatedAt() != null && instance.getUpdatedAt() != null;
+	}
+
+	/**
+	 * Use this method to update the instance with a new power status. This instance is not yet
+	 * persisted to the database.
+	 */
 	public static UpdatedInstance of(Instance instance, PowerStatus powerStatus) {
 		return new UpdatedInstance(
 				instance.getName(),
@@ -44,6 +73,8 @@ public class UpdatedInstance extends Instance {
 				entity.getHost(),
 				entity.getImageSource(),
 				entity.getFlavorId(),
-				entity.getId());
+				entity.getId(),
+				entity.getCreatedAt(),
+				entity.getUpdatedAt());
 	}
 }

@@ -76,7 +76,8 @@ class DeleteInstanceUseCaseTest {
 		DeleteInstanceUseCaseDto.DeleteInstanceUseCaseIn useCaseIn =
 				new DeleteInstanceUseCaseDto.DeleteInstanceUseCaseIn(1L);
 
-		given(instanceRepository.findById(anyLong())).willReturn(Optional.of(InstanceEntityFixtures.giveMeOne().build()));
+		given(instanceRepository.findById(anyLong()))
+				.willReturn(Optional.of(InstanceEntityFixtures.giveMeOne().build()));
 
 		given(instanceRepository.save(any(InstanceEntity.class)))
 				.willAnswer(invocation -> invocation.getArgument(0));

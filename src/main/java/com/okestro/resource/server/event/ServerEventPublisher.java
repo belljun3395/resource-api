@@ -16,12 +16,6 @@ public class ServerEventPublisher {
 	}
 
 	public void publishEvent(
-			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceUpdateLogEvent
-					event) {
-		applicationEventPublisher.publishEvent(event);
-	}
-
-	public void publishEvent(
 			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceDeleteLogEvent
 					event) {
 		applicationEventPublisher.publishEvent(event);
@@ -29,5 +23,17 @@ public class ServerEventPublisher {
 
 	public void publishEvent(InstanceEvent.InstanceTransactionEvent.DeleteInstanceCommand command) {
 		applicationEventPublisher.publishEvent(command);
+	}
+
+	public void publishEvent(
+			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceUpdateLogEvent
+					event) {
+		applicationEventPublisher.publishEvent(event);
+	}
+
+	public void publishEvent(
+			InstanceEvent.InstanceTransactionEvent.InstanceTransactionLogEvent.InstanceCreateLogEvent
+					event) {
+		applicationEventPublisher.publishEvent(event);
 	}
 }
