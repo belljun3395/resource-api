@@ -1,9 +1,12 @@
 package com.okestro.resource.server.controller;
 
+import com.okestro.resource.server.application.DeleteInstanceUseCase;
 import com.okestro.resource.server.application.PostInstanceUseCase;
 import com.okestro.resource.server.application.UpdateInstancePowerUseCase;
+import com.okestro.resource.server.application.dto.DeleteInstanceUseCaseDto;
 import com.okestro.resource.server.application.dto.PostInstanceUseCaseDto;
 import com.okestro.resource.server.application.dto.UpdateInstancePowerUsecaseDto;
+import com.okestro.resource.server.controller.request.DeleteInstanceRequest;
 import com.okestro.resource.server.controller.request.PostInstanceRequest;
 import com.okestro.resource.server.controller.request.UpdateInstancePowerRequest;
 import com.okestro.resource.support.web.ApiResponse;
@@ -20,8 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class ServerController {
-	private final UpdateInstancePowerUseCase updateInstancePowerUseCase;
 	private final PostInstanceUseCase postInstanceUseCase;
+	private final UpdateInstancePowerUseCase updateInstancePowerUseCase;
+	private final DeleteInstanceUseCase deleteInstanceUseCase;
 
 	@PostMapping("/instances")
 	public ApiResponse<ApiResponse.SuccessBody<PostInstanceUseCaseDto.PostInstanceUseCaseOut>>
@@ -37,6 +41,18 @@ public class ServerController {
 			updateInstancePower(@RequestBody UpdateInstancePowerRequest request) {
 		UpdateInstancePowerUsecaseDto.UpdateInstanceUseCaseOut useCaseOut =
 				updateInstancePowerUseCase.execute(UpdateInstancePowerUsecaseDto.in(request));
+		return ApiResponseGenerator.success(useCaseOut, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/instances")
+	public ApiResponse<ApiResponse.SuccessBody<DeleteInstanceUseCaseDto.DeleteInstanceUseCaseOut>>
+			deleteInstance(@RequestBody DeleteInstanceRequest request) {
+		DeleteInstanceUseCaseDto.DeleteInstanceUseCaseOut useCaseOut =
+				deleteInstanceUseCase.execute(DeleteInstanceUseCaseDto.in(request));
+
+		if (!useCaseOut.getIsDeleted()) {
+			return ApiResponseGenerator.success(useCaseOut, HttpStatus.ACCEPTED);
+		}
 		return ApiResponseGenerator.success(useCaseOut, HttpStatus.OK);
 	}
 }

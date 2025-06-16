@@ -24,6 +24,7 @@ public class UpdatedInstance extends Instance {
 			ImageSource imageSource,
 			Long flavorId,
 			Long id) {
+		// updatedAt is set to null because it is set by the repository layer
 		super(name, description, alias, powerStatus, host, imageSource, flavorId, id);
 	}
 

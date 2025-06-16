@@ -1,6 +1,7 @@
 package com.okestro.resource.server.domain;
 
 import com.okestro.resource.server.domain.enums.PowerStatus;
+import com.okestro.resource.server.domain.model.instance.DeleteInstance;
 import com.okestro.resource.server.domain.model.instance.NewInstance;
 import com.okestro.resource.server.domain.model.instance.UpdatedInstance;
 import com.okestro.resource.server.domain.support.InstanceAliasConverter;
@@ -12,6 +13,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,6 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 		name = "instances",
 		uniqueConstraints = {@UniqueConstraint(name = "uq_instance_alias", columnNames = "alias")})
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "update  instances set deleted = true where id = ?")
 public class InstanceEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +77,18 @@ public class InstanceEntity {
 	@Column(name = "deleted", nullable = false)
 	private Boolean deleted = false;
 
+	public static InstanceEntity createNew(NewInstance newInstance) {
+		return InstanceEntity.builder()
+				.name(newInstance.getName())
+				.description(newInstance.getDescription())
+				.alias(newInstance.getAlias())
+				.powerStatus(PowerStatus.RUNNING)
+				.host(newInstance.getHost())
+				.flavorId(newInstance.getFlavorId())
+				.imageSource(newInstance.getImageSource())
+				.build();
+	}
+
 	public static InstanceEntity updateTo(UpdatedInstance instance) {
 		return InstanceEntity.builder()
 				.id(instance.getId())
@@ -87,15 +102,17 @@ public class InstanceEntity {
 				.build();
 	}
 
-	public static InstanceEntity createNew(NewInstance newInstance) {
+	public static InstanceEntity updateTo(DeleteInstance instance) {
 		return InstanceEntity.builder()
-				.name(newInstance.getName())
-				.description(newInstance.getDescription())
-				.alias(newInstance.getAlias())
-				.powerStatus(PowerStatus.RUNNING)
-				.host(newInstance.getHost())
-				.flavorId(newInstance.getFlavorId())
-				.imageSource(newInstance.getImageSource())
+				.id(instance.getId())
+				.name(instance.getName())
+				.description(instance.getDescription())
+				.alias(instance.getAlias())
+				.powerStatus(instance.getPowerStatus())
+				.host(instance.getHost())
+				.flavorId(instance.getFlavorId())
+				.imageSource(instance.getImageSource())
+				.deleted(instance.getIsDeleted())
 				.build();
 	}
 
