@@ -60,7 +60,9 @@ public class DeleteInstanceUseCase {
 	public DeleteInstance deleteInstance(ShutDownInstance shutDownedInstance) {
 		DeleteInstance deleteInstance = shutDownedInstance.delete();
 		try {
-			instanceRepository.delete(InstanceEntity.updateTo(deleteInstance));
+			// If delete with changed power status, it has to use update method.
+			// Delete method only changes the deleted flag.
+			instanceRepository.save(InstanceEntity.updateTo(deleteInstance));
 		} catch (Exception e) {
 			log.warn(
 					"Failed to delete instance with id: {}, error: {}",
