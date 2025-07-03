@@ -26,6 +26,7 @@ public class InstanceCustomRepositoryImpl extends BaseQueryDslRepository
 						.createQuery()
 						.select(qInstance.id)
 						.from(qInstance)
+						.where(qInstance.deleted.isFalse())
 						.offset(offset)
 						.limit(pageSize)
 						.orderBy(qInstance.id.desc())
@@ -37,6 +38,7 @@ public class InstanceCustomRepositoryImpl extends BaseQueryDslRepository
 						.select(qInstance)
 						.from(qInstance)
 						.where(qInstance.id.in(ids))
+						.where(qInstance.deleted.isFalse())
 						.orderBy(qInstance.id.desc())
 						.fetch();
 
